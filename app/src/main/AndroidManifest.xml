@@ -31,7 +31,7 @@
         <activity android:name=".activity.NewsActivity"></activity>
         <activity
             android:name=".activity.ViewerActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@style/viewerTransparent"></activity>
         <activity android:name=".activity.BookActivity"></activity>
 
         //友盟

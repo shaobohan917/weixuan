@@ -1,12 +1,15 @@
 package com.wx.show.wxnews.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +23,13 @@ import com.wx.show.wxnews.entity.News;
 import com.wx.show.wxnews.fragment.BookFragment;
 import com.wx.show.wxnews.fragment.JokeFragment;
 import com.wx.show.wxnews.fragment.NewsFragment;
+import com.wx.show.wxnews.util.LogUtil;
 import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,7 +42,7 @@ import rx.schedulers.Schedulers;
  * Created by Luka on 2016/3/24.
  * E-mail:397308937@qq.com
  */
-public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerView.PullLoadMoreListener,NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerView.PullLoadMoreListener, NavigationView.OnNavigationItemSelectedListener {
     @Bind(R.id.vp_content)
     ViewPager mViewPager;
     ActionBar mActionBar;
@@ -78,7 +84,6 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         //侧滑页
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View navHeader = navigationView.getHeaderView(0);
     }
 
     private void initData() {
@@ -272,7 +277,28 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
+        if (id == R.id.nav_settings) {
+//            Timer timer = new Timer();
+//            TimerTask timerTask = new TimerTask() {
+//                @Override
+//                public void run() {
+//
+//                    ManageDialog dialog = new ManageDialog();
+//                    dialog.show(getFragmentManager(), "ManageDialog");
+//
+//                }
+//            };
+//            timer.schedule(timerTask, 400);
+//            LogUtil.d("hehe", "setting");
+        } else if (id == R.id.nav_about) {
+        } else if (id == R.id.nav_recommend) {
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

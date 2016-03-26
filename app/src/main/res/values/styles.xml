@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- 看大图时的黑色透明背景 -->
+    <style name="viewerTransparent" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/black_transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>

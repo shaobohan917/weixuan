@@ -1,8 +1,6 @@
 package com.wx.show.wxnews.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +12,7 @@ import com.bumptech.glide.request.target.Target;
 import com.kogitune.activity_transition.ActivityTransition;
 import com.kogitune.activity_transition.ExitActivityTransition;
 import com.wx.show.wxnews.R;
+import com.wx.show.wxnews.base.BaseActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Luka on 2016/3/23.
  */
-public class ViewerActivity extends Activity {
+public class ViewerActivity extends BaseActivity{
     @Bind(R.id.iv_pic)
     ImageView ivPic;
     @Bind(R.id.ll_content)
@@ -30,7 +29,7 @@ public class ViewerActivity extends Activity {
     ExitActivityTransition exitTransition;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
         ButterKnife.bind(this);

@@ -4,13 +4,25 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_catalog"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+    <com.andexert.library.RippleView
+        android:id="@+id/more"
         android:gravity="center"
-        android:singleLine="true"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        rv_centered="true">
+
+        <TextView
+            android:id="@+id/tv_catalog"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+    </com.andexert.library.RippleView>
+
+
 </LinearLayout>
