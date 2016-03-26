@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.wx.show.wxnews"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 2
+        versionName "1.0.2"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    //RecyclerViewPager
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+    //Retrofit+RxJava
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    //可刷新RecyclerView
+    compile 'com.wuxiaolong.pullloadmorerecyclerview:library:1.0.4'
+    //    compile 'com.sch.rfview:AnimRefreshRecyclerView:1.0.4@aar'
+    //友盟
+    compile files('libs/umeng-analytics-v5.6.4.jar')
+    //共享视图元素
+    compile 'com.kogitune:pre-lollipop-activity-transition:1.3.0'
+    //butterknife
+    compile 'com.jakewharton:butterknife:7.0.1'
+    //RecyclerViewPager
+//    compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.0-beta5'
+//    compile 'com.github.lsjwzh.RecyclerViewPager:tablayoutsupport:v1.1.0-beta5'
+    //NavigationView
+    compile 'com.android.support:design:23.1.1'
+    //rippleeffect
+    compile 'com.github.traex.rippleeffect:library:1.2.3'
+}

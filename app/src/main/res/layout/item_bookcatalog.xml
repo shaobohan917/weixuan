@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.andexert.library.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    ripple:rv_centered="true">
+
+    <TextView
+        android:id="@+id/tv_catalog"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
+
+</com.andexert.library.RippleView>
+
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="60dp"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<TextView-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:id="@+id/tv_catalog"-->
+    <!--android:layout_width="140dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center"-->
+    <!--android:singleLine="true"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="22sp" />-->
+    <!--</LinearLayout>-->
