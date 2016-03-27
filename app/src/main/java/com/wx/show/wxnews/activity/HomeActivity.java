@@ -1,5 +1,6 @@
 package com.wx.show.wxnews.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -66,6 +67,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     private BookFragment bookFragment;
     private JokeFragment jokeFragment;
     private String tag = "HomeActivity";
+    private ArrayList<Drawable> mIconList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,12 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     }
 
     private void initData() {
+        //添加表情
+        mIconList = new ArrayList();
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_import_contacts_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_sentiment_very_satisfied_black_48dp));
+
         mTitleList.add(getString(R.string.tab_news));
         mTitleList.add(getString(R.string.tab_joke));
         mTitleList.add(getString(R.string.tab_book));
@@ -120,9 +128,14 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         });
         //添加标题
         for (int i = 0; i < mTitleList.size(); i++) {
+//            tabHost.addTab(
+//                    tabHost.newTab()
+//                            .setText(mTitleList.get(i))
+//                            .setTabListener(this)
+//            );
             tabHost.addTab(
                     tabHost.newTab()
-                            .setText(mTitleList.get(i))
+                            .setIcon(mIconList.get(i))
                             .setTabListener(this)
             );
             //获取数据
@@ -316,4 +329,6 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
             super.onBackPressed();
         }
     }
+
+
 }

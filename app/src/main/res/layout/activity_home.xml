@@ -25,8 +25,9 @@
             android:id="@+id/materialTabHost"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            app:accentColor="@color/colorAccent"
-            app:primaryColor="@color/colorPrimary"
+            app:accentColor="@color/customizeColorAccent"
+            app:primaryColor="@color/customizeColorPrimary"
+            app:hasIcons="true"
             app:textColor="#FFFFFF" />
 
         <android.support.v4.view.ViewPager
