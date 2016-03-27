@@ -7,27 +7,28 @@
     android:layout_height="match_parent"
     tools:openDrawer="start">
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/customizeColorPrimary"
+            android:fitsSystemWindows="true"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay" />
+
 
         <it.neokree.materialtabs.MaterialTabHost
             android:id="@+id/materialTabHost"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:accentColor="@color/customizeColorAccent"
-            app:primaryColor="@color/customizeColorPrimary"
             app:hasIcons="true"
+            app:primaryColor="@color/customizeColorPrimary"
             app:textColor="#FFFFFF" />
 
         <android.support.v4.view.ViewPager
@@ -35,6 +36,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v4.view.ViewPager>
     </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginTop="50dp"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer" />
 
 
 </android.support.v4.widget.DrawerLayout>

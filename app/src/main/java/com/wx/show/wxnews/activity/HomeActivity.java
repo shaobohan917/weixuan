@@ -9,7 +9,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
@@ -47,6 +50,10 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     MaterialTabHost tabHost;
     @Bind(R.id.nav_view)
     NavigationView navigationView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
 
     private List<String> mTitleList = new ArrayList();  //标题集合
     private List<Fragment> mFragmentList = new ArrayList<>();//页卡视图集合
@@ -68,6 +75,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     private JokeFragment jokeFragment;
     private String tag = "HomeActivity";
     private ArrayList<Drawable> mIconList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,9 +88,35 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
 
 
     private void initView() {
+        initToggle();
         showLoading();
         //侧滑页
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    /**
+     * 初始化按钮
+     */
+    private void initToggle() {
+
+        toolbar.setTitle("Amber Kuo");
+        setSupportActionBar(toolbar);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                toolbar, R.string.nav_about,
+                R.string.nav_recommend) {
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
     }
 
     private void initData() {
