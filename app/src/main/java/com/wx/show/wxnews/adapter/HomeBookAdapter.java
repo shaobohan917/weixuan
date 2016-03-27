@@ -33,6 +33,7 @@ public class HomeBookAdapter extends RecyclerView.Adapter<HomeBookAdapter.ViewHo
         this.mList = mList;
     }
 
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_bookcatalog, parent, false);
@@ -43,6 +44,9 @@ public class HomeBookAdapter extends RecyclerView.Adapter<HomeBookAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(tag, "onBindViewHolder");
+        holder.itemView.setBackgroundResource(R.drawable.recycler_bg);
+        holder.itemView.setOnClickListener(holder);
+
         holder.tvCatalog.setText(mList.get(position).catalog);
         holder.tvCatalog.setOnClickListener(holder);
         holder.setPosition(position);

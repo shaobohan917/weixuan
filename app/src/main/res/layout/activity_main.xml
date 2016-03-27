@@ -6,6 +6,7 @@
     tools:context="com.wx.show.wxnews.activity.HomeActivity">
 
     <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        android:background="@color/white"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>

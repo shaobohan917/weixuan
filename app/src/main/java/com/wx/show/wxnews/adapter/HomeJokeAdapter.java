@@ -1,8 +1,6 @@
 package com.wx.show.wxnews.adapter;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
-import com.wx.show.wxnews.activity.ViewerActivity;
 import com.wx.show.wxnews.entity.Joke;
 
 import java.util.List;
@@ -29,7 +25,6 @@ public class HomeJokeAdapter extends RecyclerView.Adapter<HomeJokeAdapter.ViewHo
 
     private HomeActivity context;
     private List<Joke.ResultBean.DataBean> mList;
-    private String tag = "HomeJokeAdapter";
 
     public HomeJokeAdapter(HomeActivity context, List mList) {
         this.context = context;
@@ -39,17 +34,20 @@ public class HomeJokeAdapter extends RecyclerView.Adapter<HomeJokeAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_joke, parent, false);
-        Log.d(tag, "onCreateViewHolder");
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Log.d(tag, "onBindViewHolder");
+        holder.itemView.setBackgroundResource(R.drawable.recycler_bg);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
         Glide.with(context).load(mList.get(position).url).into(holder.ivImg);
         holder.tvTitle.setText(mList.get(position).content);
-        holder.ivImg.setOnClickListener(holder);
-        holder.setPosition(position);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class HomeJokeAdapter extends RecyclerView.Adapter<HomeJokeAdapter.ViewHo
         return mList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_img)
         ImageView ivImg;
         @Bind(R.id.tv_title)
@@ -66,26 +64,6 @@ public class HomeJokeAdapter extends RecyclerView.Adapter<HomeJokeAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
-
-        private int position;
-
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.iv_img:
-                    String imgUrl = mList.get(position).url;
-                    if (!TextUtils.isEmpty(imgUrl)) {
-                        Intent intent1 = new Intent(context, ViewerActivity.class);
-                        intent1.putExtra("imgUrl", imgUrl);
-                        ActivityTransitionLauncher.with(context).from(v).launch(intent1);
-                    }
-                    break;
-            }
         }
     }
 }

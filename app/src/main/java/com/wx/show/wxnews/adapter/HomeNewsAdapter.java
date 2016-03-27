@@ -12,12 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.LogTime;
 import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.activity.NewsActivity;
 import com.wx.show.wxnews.activity.ViewerActivity;
 import com.wx.show.wxnews.entity.News;
+import com.wx.show.wxnews.util.LogUtil;
+import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
 
     private HomeActivity context;
     private List<News.ResultBean.ListBean> mList;
-    private String tag = "hehe";
+    private String tag = "HomeNewsAdapter";
 
     public HomeNewsAdapter(HomeActivity context, List mList) {
         this.context = context;
@@ -48,11 +51,16 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(tag, "onBindViewHolder");
+        //ripple
+        holder.itemView.setBackgroundResource(R.drawable.recycler_bg);
+        holder.itemView.setOnClickListener(holder);
+
         holder.tvTitle.setText("标题:" + mList.get(position).title);
-        holder.tvSource.setText("作者:" + mList.get(position).source);
+        holder.tvSource.setText("来源:" + mList.get(position).source);
         Glide.with(context).load(mList.get(position).firstImg).into(holder.ivImg);
 
-        holder.llContent.setOnClickListener(holder);
+        holder.tvTitle.setOnClickListener(holder);
+        holder.tvSource.setOnClickListener(holder);
         holder.ivImg.setOnClickListener(holder);
         holder.setPosition(position);
     }
@@ -69,8 +77,6 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
         TextView tvTitle;
         @Bind(R.id.tv_source)
         TextView tvSource;
-        @Bind(R.id.ll_content)
-        LinearLayout llContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,7 +84,6 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
         }
 
         private int position;
-
         public void setPosition(int position) {
             this.position = position;
         }
@@ -86,7 +91,8 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.ll_content:
+                case R.id.tv_title:
+                case R.id.tv_source:
                     Intent intent = NewsActivity.getExtraDataIntent(context, mList.get(position).url);
                     context.startActivity(intent);
                     break;
