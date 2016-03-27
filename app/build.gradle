@@ -52,4 +52,7 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     //rippleeffect
 //    compile 'com.github.traex.rippleeffect:library:1.3'
+
+    //MaterialTabs
+    compile 'it.neokree:MaterialTabs:0.11'
 }

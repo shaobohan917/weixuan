@@ -1,18 +1,14 @@
 package com.wx.show.wxnews.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
@@ -28,11 +24,12 @@ import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -42,15 +39,16 @@ import rx.schedulers.Schedulers;
  * Created by Luka on 2016/3/24.
  * E-mail:397308937@qq.com
  */
-public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerView.PullLoadMoreListener, NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerView.PullLoadMoreListener, NavigationView.OnNavigationItemSelectedListener, MaterialTabListener {
     @Bind(R.id.vp_content)
     ViewPager mViewPager;
-    ActionBar mActionBar;
+    @Bind(R.id.materialTabHost)
+    MaterialTabHost tabHost;
+    @Bind(R.id.nav_view)
+    NavigationView navigationView;
 
     private List<String> mTitleList = new ArrayList();  //标题集合
     private List<Fragment> mFragmentList = new ArrayList<>();//页卡视图集合
-
-    private List<ActionBar.Tab> tablist = new ArrayList<>();
 
     private ArrayList<News.ResultBean.ListBean> mNewsData;
     private ArrayList<Joke.ResultBean.DataBean> mJokeData;
@@ -67,7 +65,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     private NewsFragment newsFragment;
     private BookFragment bookFragment;
     private JokeFragment jokeFragment;
-
+    private String tag = "HomeActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,14 +80,13 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     private void initView() {
         showLoading();
         //侧滑页
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void initData() {
-        mTitleList.add("文章");
-        mTitleList.add("图书");
-        mTitleList.add("趣图");
+        mTitleList.add(getString(R.string.tab_news));
+        mTitleList.add(getString(R.string.tab_joke));
+        mTitleList.add(getString(R.string.tab_book));
 
         mNewsData = new ArrayList<>();
         mBookData = new ArrayList<>();
@@ -105,9 +102,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
 
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
-
-        //添加标题
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -115,7 +110,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
 
             @Override
             public void onPageSelected(int position) {
-                mActionBar.setSelectedNavigationItem(position);
+                tabHost.setSelectedNavigationItem(position);
             }
 
             @Override
@@ -123,45 +118,19 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
 
             }
         });
-        mActionBar = getSupportActionBar();
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        mActionBar.setDisplayShowHomeEnabled(false);
-        for (int i = 0; i != mTitleList.size(); i++) {
-            tablist.add(mActionBar.newTab().setText(mTitleList.get(i))
-                    .setTabListener(mTabListener));
-            mActionBar.addTab(tablist.get(i));
+        //添加标题
+        for (int i = 0; i < mTitleList.size(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setText(mTitleList.get(i))
+                            .setTabListener(this)
+            );
+            //获取数据
+            getNewsByRxJava();
+            getBookCatalogByRxJava();
+            getJokeByRxJava();
         }
-
-
-        getNewsByRxJava();
-        getBookCatalogByRxJava();
-        getJokeByRxJava();
     }
-
-    private ActionBar.TabListener mTabListener = new ActionBar.TabListener() {
-
-        @Override
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            if (tab == tablist.get(0)) {
-                mViewPager.setCurrentItem(0);
-            } else if (tab == tablist.get(1)) {
-                mViewPager.setCurrentItem(1);
-            } else if (tab == tablist.get(2)) {
-                mViewPager.setCurrentItem(2);
-            }
-        }
-
-        @Override
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
-
-        @Override
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
-    };
 
     /**
      * 文章数据
@@ -194,7 +163,37 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                     }
                 });
     }
+    /**
+     * 书目数据
+     */
+    public void getBookCatalogByRxJava() {
+        Observable<BookCatalog> observable = getUrlService(bookUrl).getBookCatalogData(bookKey);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<BookCatalog>() {
+                    @Override
+                    public void onCompleted() {
+                        bookFragment.setData(mBookData);
+                        disLoading();
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(BookCatalog bookCatalog) {
+                        if (bookCatalog.error_code == 0 && bookCatalog.result != null) {
+                            if (mNewsPage == 1) {
+                                mBookData.clear();
+                            }
+                            mBookData.addAll(bookCatalog.result);
+                        } else {
+                            ToastUtil.showToast(HomeActivity.this, bookCatalog.error_code + ":" + bookCatalog.reason);
+                        }
+                    }
+                });
+    }
     /**
      * 笑话数据
      */
@@ -222,38 +221,6 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                             mJokeData.addAll(joke.result.data);
                         } else {
                             ToastUtil.showToast(HomeActivity.this, joke.error_code + ":" + joke.reason);
-                        }
-                    }
-                });
-    }
-
-    /**
-     * 笑话数据
-     */
-    public void getBookCatalogByRxJava() {
-        Observable<BookCatalog> observable = getUrlService(bookUrl).getBookCatalogData(bookKey);
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BookCatalog>() {
-                    @Override
-                    public void onCompleted() {
-                        bookFragment.setData(mBookData);
-                        disLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(BookCatalog bookCatalog) {
-                        if (bookCatalog.error_code == 0 && bookCatalog.result != null) {
-                            if (mNewsPage == 1) {
-                                mBookData.clear();
-                            }
-                            mBookData.addAll(bookCatalog.result);
-                        } else {
-                            ToastUtil.showToast(HomeActivity.this, bookCatalog.error_code + ":" + bookCatalog.reason);
                         }
                     }
                 });
@@ -292,7 +259,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
 //                }
 //            };
 //            timer.schedule(timerTask, 400);
-//            LogUtil.d("hehe", "setting");
+            LogUtil.d(tag, "setting");
         } else if (id == R.id.nav_about) {
         } else if (id == R.id.nav_recommend) {
         }
@@ -302,6 +269,22 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         return true;
     }
 
+    //开始tab监听
+    @Override
+    public void onTabSelected(MaterialTab tab) {
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabReselected(MaterialTab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(MaterialTab tab) {
+
+    }
+    //结束
 
     class MyPagerAdapter extends FragmentPagerAdapter {
 
@@ -324,4 +307,13 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     }
 
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

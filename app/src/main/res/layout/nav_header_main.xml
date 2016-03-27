@@ -4,9 +4,10 @@
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:background="@drawable/side_nav_bar"
+    android:background="@drawable/side_nav_amber"
     android:fitsSystemWindows="true"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <!--android:background="@drawable/side_nav_bar"-->
 
     <LinearLayout
         android:layout_width="wrap_content"

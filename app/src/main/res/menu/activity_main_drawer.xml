@@ -5,18 +5,18 @@
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_grey"
-            android:title="设置" />
+            android:title="@string/nav_settings" />
 
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_about_grey"
-            android:title="关于" />
+            android:title="@string/nav_about" />
 
 
         <item
             android:id="@+id/nav_recommend"
             android:icon="@drawable/ic_voice_grey"
-            android:title="推荐" />
+            android:title="@string/nav_recommend" />
 
     </group>
 

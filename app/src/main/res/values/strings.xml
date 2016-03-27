@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">微选</string>
+    <!-- 侧滑栏 -->
+    <string name="nav_settings">设置</string>
+    <string name="nav_about">关于</string>
+    <string name="nav_recommend">推荐</string>
+    <!-- tab -->
+    <string name="tab_news">文章</string>
+    <string name="tab_book">图书</string>
+    <string name="tab_joke">趣图</string>
 </resources>
