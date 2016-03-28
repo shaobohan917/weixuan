@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:id="@+id/about_app_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            tools:src="@drawable/ic_launcher" />
+
+        <LinearLayout
+            android:id="@+id/about_app_icon_space"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/about_app_icon"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/app_info_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/about_app_icon_space"
+            android:text="@string/app_name"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp">
+
+        <ImageView
+            android:id="@+id/about_app_ic_app_code"
+            style="@style/info_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/version_code"
+            android:src="@drawable/ic_voice_grey" />
+
+        <LinearLayout
+            android:id="@+id/about_app_ic_app_code_space"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/about_app_ic_app_code"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/about_app_app_code_label"
+            style="@style/activity_about_info_text"
+            android:layout_toRightOf="@id/about_app_ic_app_code_space"
+            android:text="@string/version_code" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp">
+
+        <ImageView
+            android:id="@+id/about_app_ic_app_tec"
+            style="@style/info_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/version_code"
+            android:src="@drawable/ic_voice_grey" />
+
+        <LinearLayout
+            android:id="@+id/about_app_ic_app_code_tec"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/about_app_ic_app_tec"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/about_app_app_tec_label"
+            style="@style/activity_about_info_text"
+            android:layout_toRightOf="@id/about_app_ic_app_code_tec"
+            android:text="@string/version_code" />
+    </RelativeLayout>
+</LinearLayout>

@@ -8,4 +8,13 @@
     <string name="tab_news">文章</string>
     <string name="tab_book">图书</string>
     <string name="tab_joke">趣图</string>
+    <string name="settings">设置</string>
+    <string name="key_navigation_bar_color_switch">navigation_bar_color_switch</string>
+    <string name="key_sava_traffic">key_sava_traffic</string>
+    <string name="save_traffic_summary_on">不加载图片</string>
+    <string name="save_traffic_summary_off">加载图片</string>
+    <string name="save_traffic">省流模式</string>
+    <string name="version_code">版本号\n1.1.0</string>
+    <string name="tech_support">数据支持\n聚合数据:juhe.com</string>
+    <string name="personal_home">个人主页\ngithub.com/LukaHan</string>
 </resources>

@@ -4,11 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="customizeColorPrimary">#3A5FCD</color>
+    <color name="customizeColorPrimary">#87CEFA</color>
     <color name="customizeColorAccent">#C6E2FF</color>
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#ffffffff</color>
     <color name="black_transparent">#e0000000</color>
+
+    <color name="lightPrimary_3">#96d6db</color>
 </resources>

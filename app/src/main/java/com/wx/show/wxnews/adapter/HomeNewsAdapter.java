@@ -1,6 +1,9 @@
 package com.wx.show.wxnews.adapter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,11 +60,15 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
 
         holder.tvTitle.setText("标题:" + mList.get(position).title);
         holder.tvSource.setText("来源:" + mList.get(position).source);
-        Glide.with(context).load(mList.get(position).firstImg).into(holder.ivImg);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean saveTraffic = sharedPreferences.getBoolean(context.getString(R.string.key_sava_traffic), false);
+        if(!saveTraffic){
+            Glide.with(context).load(mList.get(position).firstImg).into(holder.ivImg);
+            holder.ivImg.setOnClickListener(holder);
+        }
 
         holder.tvTitle.setOnClickListener(holder);
         holder.tvSource.setOnClickListener(holder);
-        holder.ivImg.setOnClickListener(holder);
         holder.setPosition(position);
     }
 

@@ -1,6 +1,8 @@
 package com.wx.show.wxnews.adapter;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,9 +59,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.tvTags.setText("标签:" + mList.get(position).tags);
         holder.tvSub1.setText("简介:" + mList.get(position).sub1);
         holder.tvReading.setText(mList.get(position).reading);
-        Glide.with(context).load(mList.get(position).img).into(holder.ivImg);
 
-        holder.ivImg.setOnClickListener(holder);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean saveTraffic = sharedPreferences.getBoolean(context.getString(R.string.key_sava_traffic), false);
+        if(!saveTraffic){
+            Glide.with(context).load(mList.get(position).img).into(holder.ivImg);
+            holder.ivImg.setOnClickListener(holder);
+        }
+
         holder.llContent.setOnClickListener(holder);
         holder.setPosition(position);
     }

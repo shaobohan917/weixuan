@@ -1,5 +1,7 @@
 package com.wx.show.wxnews.adapter;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,8 +47,12 @@ public class HomeJokeAdapter extends RecyclerView.Adapter<HomeJokeAdapter.ViewHo
             public void onClick(View v) {
             }
         });
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean saveTraffic = sharedPreferences.getBoolean(context.getString(R.string.key_sava_traffic), false);
+        if(!saveTraffic){
+            Glide.with(context).load(mList.get(position).url).into(holder.ivImg);
+        }
 
-        Glide.with(context).load(mList.get(position).url).into(holder.ivImg);
         holder.tvTitle.setText(mList.get(position).content);
     }
 

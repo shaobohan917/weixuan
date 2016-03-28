@@ -1,7 +1,10 @@
 package com.wx.show.wxnews.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +31,8 @@ import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -82,6 +87,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
         initView();
         initData();
     }
@@ -99,7 +105,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
      */
     private void initToggle() {
 
-        toolbar.setTitle("Amber Kuo");
+        toolbar.setTitle("微选");
         setSupportActionBar(toolbar);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar, R.string.nav_about,
@@ -210,6 +216,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                     }
                 });
     }
+
     /**
      * 书目数据
      */
@@ -241,6 +248,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                     }
                 });
     }
+
     /**
      * 笑话数据
      */
@@ -295,21 +303,30 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         int id = item.getItemId();
 
         if (id == R.id.nav_settings) {
-//            Timer timer = new Timer();
-//            TimerTask timerTask = new TimerTask() {
-//                @Override
-//                public void run() {
-//
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
 //                    ManageDialog dialog = new ManageDialog();
 //                    dialog.show(getFragmentManager(), "ManageDialog");
-//
-//                }
-//            };
-//            timer.schedule(timerTask, 400);
-            LogUtil.d(tag, "setting");
+                    Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                    startActivity(intent);
+                }
+            };
+            timer.schedule(timerTask, 400);
         } else if (id == R.id.nav_about) {
-        } else if (id == R.id.nav_recommend) {
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
+                    startActivity(intent);
+                }
+            };
+            timer.schedule(timerTask, 400);
         }
+//        else if (id == R.id.nav_recommend) {
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

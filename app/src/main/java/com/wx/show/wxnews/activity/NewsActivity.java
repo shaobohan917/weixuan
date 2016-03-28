@@ -3,6 +3,7 @@ package com.wx.show.wxnews.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -39,6 +40,11 @@ public class NewsActivity extends BaseActivity {
     private void initView() {
         showLoading();
         webView = (WebView) findViewById(R.id.wv_web);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setUseWideViewPort(true);//设置此属性，可任意比例缩放
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setJavaScriptEnabled(true);
+
         webView.setWebViewClient(new WebViewClient() { // 设置web视图
             @Override
             public void onReceivedError(WebView view, int errorCode,

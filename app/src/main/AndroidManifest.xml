@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wx.show.wxnews"
-    android:versionCode="2"
-    android:versionName="1.0.2">
+    android:versionCode="3"
+    android:versionName="1.1.0">
 
 
     <uses-sdk android:minSdkVersion="15"></uses-sdk>
@@ -34,6 +34,8 @@
             android:name=".activity.ViewerActivity"
             android:theme="@style/viewerTransparent"></activity>
         <activity android:name=".activity.BookActivity"></activity>
+        <activity android:name=".activity.SettingsActivity"></activity>
+        <activity android:name=".activity.AboutActivity"></activity>
 
         //友盟
         <meta-data
