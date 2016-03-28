@@ -27,23 +27,23 @@ public class AboutActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        setContentView(R.layout.activity_setting);
-        initToolbar();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean navigationBarColorSwitch = sharedPreferences.getBoolean(
-                getString(R.string.key_navigation_bar_color_switch), false);
-                if (navigationBarColorSwitch && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.lightPrimary_3));
-        }
-        SettingFragment settingFragment = new SettingFragment();
-        getFragmentManager().beginTransaction().replace(R.id.setting_container, settingFragment).commit();
+        setContentView(R.layout.activity_about);
+//        initToolbar();
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        boolean navigationBarColorSwitch = sharedPreferences.getBoolean(
+//                getString(R.string.key_navigation_bar_color_switch), false);
+//                if (navigationBarColorSwitch && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.lightPrimary_3));
+//        }
+//        SettingFragment settingFragment = new SettingFragment();
+//        getFragmentManager().beginTransaction().replace(R.id.setting_container, settingFragment).commit();
     }
-
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.setting_toolbar);
-        toolbar.setTitle(getString(R.string.settings));
-        this.setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-    }
+//
+//    private void initToolbar() {
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.setting_toolbar);
+//        toolbar.setTitle(getString(R.string.settings));
+//        this.setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//    }
 }

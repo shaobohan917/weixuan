@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:layout="@xml/preference_category"
+        android:title="设置">
+
+        <CheckBoxPreference
+            android:key="@string/key_sava_traffic"
+            android:summaryOff="@string/save_traffic_summary_off"
+            android:summaryOn="@string/save_traffic_summary_on"
+            android:title="@string/save_traffic"></CheckBoxPreference>
+
+        <!--<CheckBoxPreference-->
+            <!--android:key="save_liu"-->
+            <!--android:summaryOff="移动数据下加载图片"-->
+            <!--android:summaryOn="仅在WiFi环境下加载图片"-->
+            <!--android:title="省流模式"></CheckBoxPreference>-->
+    </PreferenceCategory>
+
 
 </PreferenceScreen>
