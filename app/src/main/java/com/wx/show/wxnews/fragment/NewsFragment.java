@@ -46,6 +46,7 @@ public class NewsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        activity.getNewsByRxJava();
     }
 
     public void setData(List<News.ResultBean.ListBean> data) {

@@ -47,6 +47,7 @@ public class BookFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        activity.getBookCatalogByRxJava();
     }
 
     public void setData(List<BookCatalog.ResultBean> data) {

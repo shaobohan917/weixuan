@@ -23,6 +23,8 @@ import com.wx.show.wxnews.activity.NewsActivity;
 import com.wx.show.wxnews.activity.ViewerActivity;
 import com.wx.show.wxnews.entity.News;
 import com.wx.show.wxnews.util.LogUtil;
+import com.wx.show.wxnews.util.NetUtil;
+import com.wx.show.wxnews.util.SPUtil;
 import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.List;
@@ -60,13 +62,10 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
 
         holder.tvTitle.setText("标题:" + mList.get(position).title);
         holder.tvSource.setText("来源:" + mList.get(position).source);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean saveTraffic = sharedPreferences.getBoolean(context.getString(R.string.key_sava_traffic), false);
-        if(!saveTraffic){
+        if(!SPUtil.isSaveTraffic(context)||NetUtil.isWifi(context)){
             Glide.with(context).load(mList.get(position).firstImg).into(holder.ivImg);
             holder.ivImg.setOnClickListener(holder);
         }
-
         holder.tvTitle.setOnClickListener(holder);
         holder.tvSource.setOnClickListener(holder);
         holder.setPosition(position);

@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.entity.Joke;
+import com.wx.show.wxnews.util.NetUtil;
+import com.wx.show.wxnews.util.SPUtil;
 
 import java.util.List;
 
@@ -47,12 +49,9 @@ public class HomeJokeAdapter extends RecyclerView.Adapter<HomeJokeAdapter.ViewHo
             public void onClick(View v) {
             }
         });
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean saveTraffic = sharedPreferences.getBoolean(context.getString(R.string.key_sava_traffic), false);
-        if(!saveTraffic){
+        if(!SPUtil.isSaveTraffic(context)|| NetUtil.isWifi(context)){
             Glide.with(context).load(mList.get(position).url).into(holder.ivImg);
         }
-
         holder.tvTitle.setText(mList.get(position).content);
     }
 

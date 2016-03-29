@@ -45,6 +45,7 @@ public class JokeFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        activity.getJokeByRxJava();
     }
 
     public void setData(List<Joke.ResultBean.DataBean> data) {

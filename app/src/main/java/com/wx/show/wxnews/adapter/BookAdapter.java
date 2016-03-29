@@ -23,6 +23,8 @@ import com.wx.show.wxnews.activity.ViewerActivity;
 import com.wx.show.wxnews.entity.Book;
 import com.wx.show.wxnews.entity.News;
 import com.wx.show.wxnews.util.LogUtil;
+import com.wx.show.wxnews.util.NetUtil;
+import com.wx.show.wxnews.util.SPUtil;
 import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.List;
@@ -60,13 +62,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.tvSub1.setText("简介:" + mList.get(position).sub1);
         holder.tvReading.setText(mList.get(position).reading);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean saveTraffic = sharedPreferences.getBoolean(context.getString(R.string.key_sava_traffic), false);
-        if(!saveTraffic){
+        if(!SPUtil.isSaveTraffic(context)||NetUtil.isWifi(context)){
             Glide.with(context).load(mList.get(position).img).into(holder.ivImg);
             holder.ivImg.setOnClickListener(holder);
         }
-
         holder.llContent.setOnClickListener(holder);
         holder.setPosition(position);
     }

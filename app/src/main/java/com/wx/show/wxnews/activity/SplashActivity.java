@@ -1,9 +1,7 @@
 package com.wx.show.wxnews.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.base.BaseActivity;
@@ -28,6 +26,6 @@ public class SplashActivity extends BaseActivity {
                 mStartActivity(intent, true);
             }
         };
-        timer.schedule(timerTask, 3000);
+        timer.schedule(timerTask, 500);
     }
 }
