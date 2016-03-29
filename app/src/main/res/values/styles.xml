@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/customizeColorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/customizeColorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -17,6 +17,7 @@
 
     <!-- toolBar -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="info_icon">
@@ -29,5 +30,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
+
+    <!--设置-全屏-->
+        <style name="NoTitleFullscreen" parent="Theme.AppCompat.Light.NoActionBar">
+            <item name="android:windowNoTitle">true</item>
+            <item name="windowActionBar">false</item>
+            <item name="android:windowFullscreen">true</item>
+            <item name="android:windowBackground">@drawable/splash</item>
+            <item name="android:windowContentOverlay">@null</item>
+        </style>
 
 </resources>

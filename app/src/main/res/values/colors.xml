@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="customizeColorPrimary">#87CEFA</color>
+    <color name="customizeColorPrimaryDark">#87CEFF</color>
     <color name="customizeColorAccent">#C6E2FF</color>
 
     <color name="black">#000000</color>

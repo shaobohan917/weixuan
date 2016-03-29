@@ -1,6 +1,7 @@
 package com.wx.show.wxnews.base;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -87,5 +88,11 @@ public class BaseActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    public void mStartActivity(Intent intent, boolean needFinish){
+        startActivity(intent);
+        if(needFinish){finish();}
+        overridePendingTransition(android.support.v7.appcompat.R.anim.abc_slide_in_bottom, android.support.v7.appcompat.R.anim.abc_slide_out_bottom);
     }
 }
