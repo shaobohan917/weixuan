@@ -1,5 +1,6 @@
 package com.wx.show.wxnews.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ public class ViewerActivity extends BaseActivity{
     LinearLayout llContent;
 
     ExitActivityTransition exitTransition;
+    private String imgUrl;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -41,8 +43,8 @@ public class ViewerActivity extends BaseActivity{
                 }
             }
         });
-        String imgFile = getIntent().getStringExtra("imgUrl");
-        Glide.with(this).load(imgFile).listener(new RequestListener<String, GlideDrawable>() {
+        getExtraData();
+        Glide.with(this).load(imgUrl).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                 return false;
@@ -61,5 +63,16 @@ public class ViewerActivity extends BaseActivity{
         if (exitTransition != null) {
             exitTransition.exit(this);
         }
+    }
+
+    public static Intent getExtraDataIntent(HomeActivity context, String imgUrl) {
+        Intent intent = new Intent(context, BookActivity.class);
+        intent.putExtra("imgUrl", imgUrl);
+        return intent;
+    }
+
+    private void getExtraData() {
+        Intent intent = getIntent();
+        imgUrl = intent.getStringExtra("imgUrl");
     }
 }

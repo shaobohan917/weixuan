@@ -22,9 +22,11 @@ import com.wx.show.wxnews.base.BaseActivity;
 import com.wx.show.wxnews.entity.BookCatalog;
 import com.wx.show.wxnews.entity.Joke;
 import com.wx.show.wxnews.entity.News;
+import com.wx.show.wxnews.entity.Wooyun;
 import com.wx.show.wxnews.fragment.BookFragment;
 import com.wx.show.wxnews.fragment.JokeFragment;
 import com.wx.show.wxnews.fragment.NewsFragment;
+import com.wx.show.wxnews.fragment.WooyunFragment;
 import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -63,22 +65,27 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     private ArrayList<News.ResultBean.ListBean> mNewsData;
     private ArrayList<Joke.ResultBean.DataBean> mJokeData;
     private ArrayList<BookCatalog.ResultBean> mBookData;
+    private ArrayList<Wooyun.ResultBean> mWooyunData;
 
     private String newsUrl = "http://v.juhe.cn/";
     private String jokeUrl = "http://japi.juhe.cn/";
     private String bookUrl = "http://apis.juhe.cn/";
+    private String wooyunUrl = "http://op.juhe.cn/";
     private String newsKey = "220c2251d82b641a400a4694d18ee8dd";    //申请的key，过期要更换
     private String jokeKey = "d8c9a7c2ac395bbf6efbc4d5eaf02981";
     private String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
+    private String wooyunKey = "e1ea89310eab7c590cfdda083566e70b";
     private int mNewsPage = 1;
     private int mJokePage = 1;
     private NewsFragment newsFragment;
     private BookFragment bookFragment;
     private JokeFragment jokeFragment;
+    private WooyunFragment wooyunFragment;
     private String tag = "HomeActivity";
     private ArrayList<Drawable> mIconList;
     private ActionBarDrawerToggle mDrawerToggle;
     private int mCurrent;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,10 +132,12 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         mNewsData = new ArrayList<>();
         mBookData = new ArrayList<>();
         mJokeData = new ArrayList<>();
+        mWooyunData = new ArrayList<>();
         //添加标题
         mIconList = new ArrayList();
         mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_import_contacts_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_sentiment_very_satisfied_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_sentiment_very_satisfied_black_48dp));
         for (int i = 0; i < mIconList.size(); i++) {
             tabHost.addTab(
@@ -141,9 +150,11 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         newsFragment = new NewsFragment(this);
         bookFragment = new BookFragment(this);
         jokeFragment = new JokeFragment(this);
+        wooyunFragment = new WooyunFragment(this);
         mFragmentList.add(newsFragment);
         mFragmentList.add(bookFragment);
         mFragmentList.add(jokeFragment);
+        mFragmentList.add(wooyunFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -261,6 +272,31 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                             mJokeData.addAll(joke.result.data);
                         } else {
                             ToastUtil.showToast(HomeActivity.this, joke.error_code + ":" + joke.reason);
+                        }
+                    }
+                });
+    }
+    public void getWooyunByRxJava() {
+        Observable<Wooyun> observable = getUrlService(wooyunUrl).getWooyunData(wooyunKey);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Wooyun>() {
+                    @Override
+                    public void onCompleted() {
+                        wooyunFragment.setData(mWooyunData);
+                        disLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Wooyun wooyun) {
+                        if (wooyun.error_code == 0 && wooyun.result != null) {
+                            mWooyunData.addAll(wooyun.result);
+                        } else {
+                            ToastUtil.showToast(HomeActivity.this, wooyun.error_code + ":" + wooyun.reason);
                         }
                     }
                 });

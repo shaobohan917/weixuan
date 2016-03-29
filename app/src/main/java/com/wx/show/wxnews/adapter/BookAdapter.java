@@ -1,8 +1,6 @@
 package com.wx.show.wxnews.adapter;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,15 +15,11 @@ import com.bumptech.glide.Glide;
 import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.BookActivity;
-import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.activity.NewsActivity;
 import com.wx.show.wxnews.activity.ViewerActivity;
 import com.wx.show.wxnews.entity.Book;
-import com.wx.show.wxnews.entity.News;
-import com.wx.show.wxnews.util.LogUtil;
 import com.wx.show.wxnews.util.NetUtil;
 import com.wx.show.wxnews.util.SPUtil;
-import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.List;
 

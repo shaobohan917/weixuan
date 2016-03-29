@@ -51,5 +51,7 @@ public interface APIService {
     @GET("goodbook/query")
     Observable<Book> getBookData(@Query("catalog_id") int catalog_id, @Query("pn") int pn, @Query("rn") int rn,@Query("key") String key);
 
+    @GET("wooyun/index")
+    Observable<Wooyun> getWooyunData(@Query("key") String key);
 
 }
