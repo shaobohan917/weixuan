@@ -6,12 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.activity.ViewerActivity;
-import com.wx.show.wxnews.entity.Wooyun;
+import com.wx.show.wxnews.activity.ZhihuNewsActivity;
+import com.wx.show.wxnews.entity.ZhihuDaily;
 
 import java.util.List;
 
@@ -21,13 +24,13 @@ import butterknife.ButterKnife;
 /**
  * Created by Luka on 2016/3/21.
  */
-public class HomeWooyunAdapter extends RecyclerView.Adapter<HomeWooyunAdapter.ViewHolder> {
+public class HomeZhihuDailyAdapter extends RecyclerView.Adapter<HomeZhihuDailyAdapter.ViewHolder> {
 
     private HomeActivity context;
-    private List<Wooyun.ResultBean> mList;
+    private List<ZhihuDaily.StoriesBean> mList;
     private String tag = "hehe";
 
-    public HomeWooyunAdapter(HomeActivity context, List mList) {
+    public HomeZhihuDailyAdapter(HomeActivity context, List mList) {
         this.context = context;
         this.mList = mList;
     }
@@ -35,7 +38,7 @@ public class HomeWooyunAdapter extends RecyclerView.Adapter<HomeWooyunAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_wooyun, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_zhihu, parent, false);
         Log.d(tag, "onCreateViewHolder");
         return new ViewHolder(view);
     }
@@ -46,11 +49,10 @@ public class HomeWooyunAdapter extends RecyclerView.Adapter<HomeWooyunAdapter.Vi
         holder.itemView.setBackgroundResource(R.drawable.recycler_bg);
         holder.itemView.setOnClickListener(holder);
 
+        Glide.with(context).load(mList.get(position).images.get(0)).into(holder.ivImg);
         holder.tvTitle.setText("标题:" + mList.get(position).title);
-        holder.tvAuthor.setText("作者:" + mList.get(position).author);
-        holder.tvDate.setText("日期:" + mList.get(position).date);
-        holder.tvLink.setText("详情:" + mList.get(position).link);
-        holder.tvLink.setOnClickListener(holder);
+        holder.tvTitle.setOnClickListener(holder);
+        holder.ivImg.setOnClickListener(holder);
         holder.setPosition(position);
     }
 
@@ -62,12 +64,8 @@ public class HomeWooyunAdapter extends RecyclerView.Adapter<HomeWooyunAdapter.Vi
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.tv_title)
         TextView tvTitle;
-        @Bind(R.id.tv_author)
-        TextView tvAuthor;
-        @Bind(R.id.tv_date)
-        TextView tvDate;
-        @Bind(R.id.tv_link)
-        TextView tvLink;
+        @Bind(R.id.iv_img)
+        ImageView ivImg;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -83,9 +81,13 @@ public class HomeWooyunAdapter extends RecyclerView.Adapter<HomeWooyunAdapter.Vi
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.tv_link:
-                    Intent intent = ViewerActivity.getExtraDataIntent(context, mList.get(position).link);
+                case R.id.iv_img:
+                    Intent intent = ViewerActivity.getExtraDataIntent(context, mList.get(position).images.get(0));
                     context.startActivity(intent);
+                    break;
+                case R.id.tv_title:
+                    Intent intent1 = ZhihuNewsActivity.getExtraDataIntent(context, mList.get(position).id);
+                    context.startActivity(intent1);
                     break;
             }
         }

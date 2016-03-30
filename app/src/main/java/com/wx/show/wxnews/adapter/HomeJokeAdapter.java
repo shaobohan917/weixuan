@@ -50,7 +50,7 @@ public class HomeJokeAdapter extends RecyclerView.Adapter<HomeJokeAdapter.ViewHo
             }
         });
         if(!SPUtil.isSaveTraffic(context)|| NetUtil.isWifi(context)){
-            Glide.with(context).load(mList.get(position).url).into(holder.ivImg);
+//            Glide.with(context).load(mList.get(position).url).into(holder.ivImg);
         }
         holder.tvTitle.setText(mList.get(position).content);
     }

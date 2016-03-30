@@ -22,11 +22,11 @@ import com.wx.show.wxnews.base.BaseActivity;
 import com.wx.show.wxnews.entity.BookCatalog;
 import com.wx.show.wxnews.entity.Joke;
 import com.wx.show.wxnews.entity.News;
-import com.wx.show.wxnews.entity.Wooyun;
+import com.wx.show.wxnews.entity.ZhihuDaily;
 import com.wx.show.wxnews.fragment.BookFragment;
 import com.wx.show.wxnews.fragment.JokeFragment;
 import com.wx.show.wxnews.fragment.NewsFragment;
-import com.wx.show.wxnews.fragment.WooyunFragment;
+import com.wx.show.wxnews.fragment.ZhihuDailyFragment;
 import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -64,23 +64,23 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
 
     private ArrayList<News.ResultBean.ListBean> mNewsData;
     private ArrayList<Joke.ResultBean.DataBean> mJokeData;
+    private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
     private ArrayList<BookCatalog.ResultBean> mBookData;
-    private ArrayList<Wooyun.ResultBean> mWooyunData;
 
     private String newsUrl = "http://v.juhe.cn/";
     private String jokeUrl = "http://japi.juhe.cn/";
     private String bookUrl = "http://apis.juhe.cn/";
-    private String wooyunUrl = "http://op.juhe.cn/";
+    private String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/news/before/";
+
     private String newsKey = "220c2251d82b641a400a4694d18ee8dd";    //申请的key，过期要更换
     private String jokeKey = "d8c9a7c2ac395bbf6efbc4d5eaf02981";
     private String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
-    private String wooyunKey = "e1ea89310eab7c590cfdda083566e70b";
     private int mNewsPage = 1;
     private int mJokePage = 1;
     private NewsFragment newsFragment;
     private BookFragment bookFragment;
+    private ZhihuDailyFragment zhihuDailyFragment;
     private JokeFragment jokeFragment;
-    private WooyunFragment wooyunFragment;
     private String tag = "HomeActivity";
     private ArrayList<Drawable> mIconList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -131,13 +131,13 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
     private void initData() {
         mNewsData = new ArrayList<>();
         mBookData = new ArrayList<>();
+        mZhihuData = new ArrayList<>();
         mJokeData = new ArrayList<>();
-        mWooyunData = new ArrayList<>();
         //添加标题
         mIconList = new ArrayList();
         mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_import_contacts_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_sentiment_very_satisfied_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_wb_incandescent_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_sentiment_very_satisfied_black_48dp));
         for (int i = 0; i < mIconList.size(); i++) {
             tabHost.addTab(
@@ -149,15 +149,16 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
         //添加fragment
         newsFragment = new NewsFragment(this);
         bookFragment = new BookFragment(this);
+        zhihuDailyFragment = new ZhihuDailyFragment(this);
         jokeFragment = new JokeFragment(this);
-        wooyunFragment = new WooyunFragment(this);
         mFragmentList.add(newsFragment);
         mFragmentList.add(bookFragment);
+        mFragmentList.add(zhihuDailyFragment);
         mFragmentList.add(jokeFragment);
-        mFragmentList.add(wooyunFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
+
     class MyPagerAdapter extends FragmentPagerAdapter {
 
         private List<Fragment> fragments;
@@ -220,6 +221,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                     }
                 });
     }
+
     public void getBookCatalogByRxJava() {
         Observable<BookCatalog> observable = getUrlService(bookUrl).getBookCatalogData(bookKey);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -248,6 +250,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                     }
                 });
     }
+
     public void getJokeByRxJava() {
         Observable<Joke> observable = getUrlService(jokeUrl).getJokeData(mJokePage, 5, jokeKey);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -276,13 +279,14 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                     }
                 });
     }
-    public void getWooyunByRxJava() {
-        Observable<Wooyun> observable = getUrlService(wooyunUrl).getWooyunData(wooyunKey);
+
+    public void getZhihuDailyByRxJava() {
+        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl).getZhihuDaily();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Wooyun>() {
+                .subscribe(new Subscriber<ZhihuDaily>() {
                     @Override
                     public void onCompleted() {
-                        wooyunFragment.setData(mWooyunData);
+                        zhihuDailyFragment.setData(mZhihuData);
                         disLoading();
                     }
 
@@ -292,12 +296,8 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                     }
 
                     @Override
-                    public void onNext(Wooyun wooyun) {
-                        if (wooyun.error_code == 0 && wooyun.result != null) {
-                            mWooyunData.addAll(wooyun.result);
-                        } else {
-                            ToastUtil.showToast(HomeActivity.this, wooyun.error_code + ":" + wooyun.reason);
-                        }
+                    public void onNext(ZhihuDaily zhihu) {
+                        mZhihuData.addAll(zhihu.stories);
                     }
                 });
     }
@@ -332,6 +332,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
                 break;
         }
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -341,6 +342,7 @@ public class HomeActivity extends BaseActivity implements PullLoadMoreRecyclerVi
             super.onBackPressed();
         }
     }
+
     //监听tab开始
     @Override
     public void onTabSelected(MaterialTab tab) {

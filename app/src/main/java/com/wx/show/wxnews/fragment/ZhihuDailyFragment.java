@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
-import com.wx.show.wxnews.adapter.HomeWooyunAdapter;
-import com.wx.show.wxnews.entity.Wooyun;
+import com.wx.show.wxnews.adapter.HomeZhihuDailyAdapter;
+import com.wx.show.wxnews.entity.ZhihuDaily;
 
 import java.util.List;
 
@@ -21,16 +21,16 @@ import java.util.List;
  */
 
 @SuppressLint("ValidFragment")
-public class WooyunFragment extends Fragment {
+public class ZhihuDailyFragment extends Fragment {
 
     private PullLoadMoreRecyclerView mRecyclerView;
     private HomeActivity activity;
-    private HomeWooyunAdapter mAdapter;
+    private HomeZhihuDailyAdapter mAdapter;
 
-    public WooyunFragment() {
+    public ZhihuDailyFragment() {
     }
 
-    public WooyunFragment(HomeActivity activity) {
+    public ZhihuDailyFragment(HomeActivity activity) {
         this.activity = activity;
     }
 
@@ -47,12 +47,12 @@ public class WooyunFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        activity.getWooyunByRxJava();
+        activity.getZhihuDailyByRxJava();
     }
 
-    public void setData(List<Wooyun.ResultBean> data) {
+    public void setData(List<ZhihuDaily.StoriesBean> data) {
         if (mAdapter == null) {
-            mAdapter = new HomeWooyunAdapter(activity, data);
+            mAdapter = new HomeZhihuDailyAdapter(activity, data);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();

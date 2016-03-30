@@ -1,6 +1,8 @@
 package com.wx.show.wxnews.entity;
 
+import retrofit.http.Field;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -51,7 +53,13 @@ public interface APIService {
     @GET("goodbook/query")
     Observable<Book> getBookData(@Query("catalog_id") int catalog_id, @Query("pn") int pn, @Query("rn") int rn,@Query("key") String key);
 
-    @GET("wooyun/index")
-    Observable<Wooyun> getWooyunData(@Query("key") String key);
+    @GET("start-image/1080*1776")
+    Observable<SplashImg> getSplashImg();
+
+    @GET("20160329")
+    Observable<ZhihuDaily> getZhihuDaily();
+
+    @GET()
+    Observable<ZhihuNews> getZhihuNews(@Path("newsId") String newsId);
 
 }
