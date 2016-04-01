@@ -29,6 +29,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public APIService getUrlService(String url) {
+        showLoading();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();

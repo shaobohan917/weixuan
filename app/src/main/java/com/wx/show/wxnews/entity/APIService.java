@@ -62,9 +62,19 @@ public interface APIService {
     @GET("start-image/1080*1776")
     Observable<SplashImg> getSplashImg();
 
+    /**
+     * 知乎日报
+     * @param date  日期，格式为:yyyyMMdd
+     * @return
+     */
     @GET("news/before/{date}")
     Observable<ZhihuDaily> getZhihuDaily(@Path("date") String date);
 
+    /**
+     * 知乎日报 item内容
+     * @param newsId
+     * @return
+     */
     @GET("news/{id}")
     Observable<ZhihuNews> getZhihuNews(@Path("id") int newsId);
 

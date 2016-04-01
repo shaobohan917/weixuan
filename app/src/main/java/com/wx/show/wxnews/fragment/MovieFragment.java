@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
+import com.wx.show.wxnews.adapter.HomeMovieAdapter;
 import com.wx.show.wxnews.entity.Movie;
 
 import java.util.ArrayList;
@@ -31,11 +33,17 @@ import it.neokree.materialtabs.MaterialTabListener;
  */
 
 @SuppressLint("ValidFragment")
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment  {
     @Bind(R.id.vp_movie)
-    ViewPager mMovieViewPager;
+    public ViewPager mMovieViewPager;
     @Bind(R.id.materialTabHost)
     MaterialTabHost tabHost;
+    @Bind(R.id.search_View)
+    public android.widget.SearchView searchView;
+    @Bind(R.id.recyclerView)
+    PullLoadMoreRecyclerView mRecyclerView;
+
+    private HomeMovieAdapter mAdapter;
 
     private HomeActivity activity;
 
@@ -43,6 +51,7 @@ public class MovieFragment extends Fragment {
     private MovieInTheaterFragment inTheaterFragment;
     private MovieComingSoonFragment comingSoonFragment;
     private ArrayList<String> mTitleList;
+    public boolean searchOpen;
 
     public MovieFragment(HomeActivity activity) {
         this.activity = activity;
@@ -52,6 +61,32 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie, null);
         ButterKnife.bind(this, view);
+//        searchView.setOnSearchClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //设置背景
+//                searchView.setBackgroundResource(R.color.white);
+//            }
+//        });
+        searchView.setOnCloseListener(new android.widget.SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                mMovieViewPager.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
+        searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                activity.getMovieSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return view;
     }
 
@@ -62,6 +97,10 @@ public class MovieFragment extends Fragment {
         comingSoonFragment = new MovieComingSoonFragment(activity);
         mFragmentList.add(inTheaterFragment);
         mFragmentList.add(comingSoonFragment);
+
+        mRecyclerView.setLinearLayout();
+        mRecyclerView.setPullRefreshEnable(false);
+        mRecyclerView.setPullRefreshEnable(false);
 
         mMovieViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -116,7 +155,6 @@ public class MovieFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-
     class MyPagerAdapter extends FragmentPagerAdapter {
 
         private List<Fragment> fragments;
@@ -149,6 +187,22 @@ public class MovieFragment extends Fragment {
 
     public void setCoomingSoonData(List<Movie.SubjectsBean> data) {
         comingSoonFragment.setData(data);
+    }
+
+
+    public void setSearchData(ArrayList<Movie.SubjectsBean> data){
+        mMovieViewPager.setVisibility(View.GONE);
+        if (mAdapter == null) {
+            mAdapter = new HomeMovieAdapter(activity, data);
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+        mRecyclerView.setPullLoadMoreCompleted();
+        activity.disLoading();
+
+        searchOpen = true;
+        activity.disLoading();
     }
 
 }

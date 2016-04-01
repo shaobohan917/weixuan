@@ -7,17 +7,31 @@
     android:orientation="vertical"
     tools:context="com.wx.show.wxnews.activity.HomeActivity">
 
-    <it.neokree.materialtabs.MaterialTabHost
-        android:id="@+id/materialTabHost"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:accentColor="@color/customizeColorAccent"
-        app:primaryColor="@color/customizeMovieColorPrimary"
-        app:textColor="#FFFFFF" />
+        android:layout_height="48dp">
+
+        <it.neokree.materialtabs.MaterialTabHost
+            android:id="@+id/materialTabHost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:accentColor="@color/customizeColorAccent"
+            app:primaryColor="@color/customizeMovieColorPrimary"
+            app:textColor="#FFFFFF" />
+
+        <SearchView
+            android:id="@+id/search_View"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_movie"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/activity_main"></include>
 
 </LinearLayout>

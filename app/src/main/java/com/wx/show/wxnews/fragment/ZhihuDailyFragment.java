@@ -58,5 +58,6 @@ public class ZhihuDailyFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
         mRecyclerView.setPullLoadMoreCompleted();
+        activity.disLoading();
     }
 }

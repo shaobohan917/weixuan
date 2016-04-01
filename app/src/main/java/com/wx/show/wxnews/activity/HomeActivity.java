@@ -65,13 +65,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private ArrayList<Movie.SubjectsBean> mMvoieInTheaterData;
     private ArrayList<Movie.SubjectsBean> mMvoieCoomingSoonData;
+    private ArrayList<Movie.SubjectsBean> mMovieSearchData;
     private ArrayList<BookCatalog.ResultBean> mBookData;
-    private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
 
+    private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
     private String doubanBaseUrl = "https://api.douban.com/v2/";
     private String bookUrl = "http://apis.juhe.cn/";
-    private String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
 
+    private String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
     private String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
     private int mNewsPage = 1;
     private BookFragment bookFragment;
@@ -131,6 +132,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mBookData = new ArrayList<>();
         mMvoieInTheaterData = new ArrayList<>();
         mMvoieCoomingSoonData = new ArrayList<>();
+        mMovieSearchData = new ArrayList();
         //添加标题
         mIconList = new ArrayList();
         mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
@@ -299,7 +301,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 .subscribe(new Subscriber<Movie>() {
                     @Override
                     public void onCompleted() {
-                        movieFragment.setCoomingSoonData(mMvoieCoomingSoonData);
+//                        movieFragment.setCoomingSoonData(mMvoieCoomingSoonData);
                         disLoading();
                     }
 
@@ -310,8 +312,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     @Override
                     public void onNext(Movie in) {
-                        mMvoieCoomingSoonData.clear();
-                        mMvoieCoomingSoonData.addAll(in.subjects);
+                        mMovieSearchData.clear();
+                        mMovieSearchData.addAll(in.subjects);
+                        movieFragment.setSearchData(mMovieSearchData);
                     }
                 });
     }
@@ -366,6 +369,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (movieFragment.searchOpen) {
+            //判断搜索的fragment
+            //显示viewpager
+            movieFragment.mMovieViewPager.setVisibility(View.VISIBLE);
+//            movieFragment.searchView.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
         }
