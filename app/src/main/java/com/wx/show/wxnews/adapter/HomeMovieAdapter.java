@@ -3,20 +3,19 @@ package com.wx.show.wxnews.adapter;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
+import com.wx.show.wxnews.activity.NewsActivity;
 import com.wx.show.wxnews.activity.ViewerActivity;
-import com.wx.show.wxnews.activity.ZhihuNewsActivity;
-import com.wx.show.wxnews.entity.ZhihuDaily;
+import com.wx.show.wxnews.entity.Movie;
+import com.wx.show.wxnews.util.ImageUtil;
 
 import java.util.List;
 
@@ -26,40 +25,39 @@ import butterknife.ButterKnife;
 /**
  * Created by Luka on 2016/3/21.
  */
-public class HomeZhihuDailyAdapter extends RecyclerView.Adapter<HomeZhihuDailyAdapter.ViewHolder> {
+public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.ViewHolder> {
 
     private HomeActivity context;
-    private List<ZhihuDaily.StoriesBean> mList;
-    private String tag = "hehe";
+    private List<Movie.SubjectsBean> mList;
 
-    public HomeZhihuDailyAdapter(HomeActivity context, List mList) {
+    public HomeMovieAdapter(HomeActivity context, List mList) {
         this.context = context;
         this.mList = mList;
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_zhihu, parent, false);
-        Log.d(tag, "onCreateViewHolder");
+        View view = LayoutInflater.from(context).inflate(R.layout.item_movie_intheater, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Log.d(tag, "onBindViewHolder");
         holder.itemView.setBackgroundResource(R.drawable.recycler_bg);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = ZhihuNewsActivity.getExtraDataIntent(context, mList.get(position).id);
-                context.startActivity(intent1);
+                context.mStartActivity(NewsActivity.getExtraDataIntent(context, mList.get(position).alt), false);
             }
         });
-
-        Glide.with(context).load(mList.get(position).images.get(0)).into(holder.ivImg);
-        holder.tvTitle.setText("标题:" + mList.get(position).title);
+        ImageUtil.showImg(context, mList.get(position).images.medium, holder.ivImg);
+        holder.tvTitle.setText(mList.get(position).title);
+        String genres = mList.get(position).genres.toString();
+        genres = genres.substring(1, genres.length() - 1);
+        holder.tvGenres.setText("类型:" + genres);
+        holder.tvAverage.setText("评分:" + mList.get(position).rating.average + "");
         holder.ivImg.setOnClickListener(holder);
+
         holder.setPosition(position);
     }
 
@@ -69,17 +67,20 @@ public class HomeZhihuDailyAdapter extends RecyclerView.Adapter<HomeZhihuDailyAd
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @Bind(R.id.tv_title)
-        TextView tvTitle;
         @Bind(R.id.iv_img)
         ImageView ivImg;
+        @Bind(R.id.tv_title)
+        TextView tvTitle;
+        @Bind(R.id.tv_genres)
+        TextView tvGenres;
+        @Bind(R.id.tv_average)
+        TextView tvAverage;
+        private int position;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-
-        private int position;
 
         public void setPosition(int position) {
             this.position = position;
@@ -89,7 +90,7 @@ public class HomeZhihuDailyAdapter extends RecyclerView.Adapter<HomeZhihuDailyAd
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.iv_img:
-                    String imgUrl = mList.get(position).images.get(0);
+                    String imgUrl = mList.get(position).images.large;
                     if (!TextUtils.isEmpty(imgUrl)) {
                         Intent intent1 = new Intent(context, ViewerActivity.class);
                         intent1.putExtra("imgUrl", imgUrl);

@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
-import com.wx.show.wxnews.adapter.HomeNewsAdapter;
-import com.wx.show.wxnews.entity.News;
+import com.wx.show.wxnews.adapter.HomeMovieAdapter;
+import com.wx.show.wxnews.entity.Movie;
 
 import java.util.List;
 
@@ -21,16 +21,15 @@ import java.util.List;
  */
 
 @SuppressLint("ValidFragment")
-public class NewsFragment extends Fragment {
-
+public class MovieComingSoonFragment extends Fragment {
     private PullLoadMoreRecyclerView mRecyclerView;
+    private HomeMovieAdapter mAdapter;
     private HomeActivity activity;
-    private HomeNewsAdapter mAdapter;
 
-    public NewsFragment() {
+    public MovieComingSoonFragment() {
     }
 
-    public NewsFragment(HomeActivity activity) {
+    public MovieComingSoonFragment(HomeActivity activity) {
         this.activity = activity;
     }
 
@@ -39,23 +38,26 @@ public class NewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_main, null);
         mRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLinearLayout();
-//        mRecyclerView.setOnPullLoadMoreListener(activity);
+        mRecyclerView.setPullRefreshEnable(false);
+        mRecyclerView.setPullRefreshEnable(false);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        activity.getNewsByRxJava();
+        activity.getMovieComingSoon();
     }
 
-    public void setData(List<News.ResultBean.ListBean> data) {
+    public void setData(List<Movie.SubjectsBean> data) {
         if (mAdapter == null) {
-            mAdapter = new HomeNewsAdapter(activity, data);
+            mAdapter = new HomeMovieAdapter(activity, data);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();
         }
         mRecyclerView.setPullLoadMoreCompleted();
+        activity.disLoading();
     }
+
 }

@@ -21,9 +21,9 @@ import rx.schedulers.Schedulers;
  * Created by Luka on 2016/3/23.
  */
 public class ZhihuNewsActivity extends BaseActivity {
-    private String zhihuNewsUrl = "http://news-at.zhihu.com/api/4/news/";
+    private String zhihuNewsUrl = "http://news-at.zhihu.com/api/4/";
     private WebView webView;
-    private String newsId;
+    private int newsId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class ZhihuNewsActivity extends BaseActivity {
 
     private void getExtraData() {
         Intent intent = getIntent();
-        newsId = intent.getStringExtra("newsId");
+        newsId = intent.getIntExtra("newsId",0);
     }
 
     public void getZhihuNewsByRxJava() {

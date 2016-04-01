@@ -18,6 +18,7 @@ import com.wx.show.wxnews.activity.BookActivity;
 import com.wx.show.wxnews.activity.NewsActivity;
 import com.wx.show.wxnews.activity.ViewerActivity;
 import com.wx.show.wxnews.entity.Book;
+import com.wx.show.wxnews.util.ImageUtil;
 import com.wx.show.wxnews.util.NetUtil;
 import com.wx.show.wxnews.util.SPUtil;
 
@@ -55,12 +56,22 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.tvTags.setText("标签:" + mList.get(position).tags);
         holder.tvSub1.setText("简介:" + mList.get(position).sub1);
         holder.tvReading.setText(mList.get(position).reading);
+        ImageUtil.showImg(context, mList.get(position).img, holder.ivImg);
 
-        if(!SPUtil.isSaveTraffic(context)||NetUtil.isWifi(context)){
-            Glide.with(context).load(mList.get(position).img).into(holder.ivImg);
-            holder.ivImg.setOnClickListener(holder);
-        }
-        holder.llContent.setOnClickListener(holder);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String onlineUrl = mList.get(position).online;
+                if (!TextUtils.isEmpty(onlineUrl)) {
+                    int start = onlineUrl.indexOf("h");
+                    String[] urls = onlineUrl.split(" ");
+                    String jdUrl = urls[0].substring(start);
+                    Intent intent = NewsActivity.getExtraDataIntent(context, jdUrl);
+                    context.startActivity(intent);
+                }
+            }
+        });
+        holder.ivImg.setOnClickListener(holder);
         holder.setPosition(position);
     }
 
@@ -82,8 +93,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         TextView tvSub1;
         @Bind(R.id.tv_reading)
         TextView tvReading;
-        @Bind(R.id.ll_content)
-        LinearLayout llContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -99,16 +108,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.ll_content:
-                    String onlineUrl = mList.get(position).online;
-                    if (!TextUtils.isEmpty(onlineUrl)) {
-                        int start = onlineUrl.indexOf("h");
-                        String[] urls = onlineUrl.split(" ");
-                        String jdUrl = urls[0].substring(start);
-                        Intent intent = NewsActivity.getExtraDataIntent(context, jdUrl);
-                        context.startActivity(intent);
-                    }
-                    break;
                 case R.id.iv_img:
                     String imgUrl = mList.get(position).img;
                     if (!TextUtils.isEmpty(imgUrl)) {

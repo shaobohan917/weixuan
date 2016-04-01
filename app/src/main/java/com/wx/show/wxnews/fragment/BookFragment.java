@@ -58,5 +58,6 @@ public class BookFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
         mRecyclerView.setPullLoadMoreCompleted();
+//        activity.disLoading();
     }
 }

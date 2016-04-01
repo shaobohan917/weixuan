@@ -22,6 +22,7 @@ import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.activity.NewsActivity;
 import com.wx.show.wxnews.activity.ViewerActivity;
 import com.wx.show.wxnews.entity.News;
+import com.wx.show.wxnews.util.ImageUtil;
 import com.wx.show.wxnews.util.LogUtil;
 import com.wx.show.wxnews.util.NetUtil;
 import com.wx.show.wxnews.util.SPUtil;
@@ -62,10 +63,8 @@ public class HomeNewsAdapter extends RecyclerView.Adapter<HomeNewsAdapter.ViewHo
 
         holder.tvTitle.setText("标题:" + mList.get(position).title);
         holder.tvSource.setText("来源:" + mList.get(position).source);
-        if(!SPUtil.isSaveTraffic(context)||NetUtil.isWifi(context)){
-            Glide.with(context).load(mList.get(position).firstImg).into(holder.ivImg);
-            holder.ivImg.setOnClickListener(holder);
-        }
+
+        ImageUtil.showImg(context,mList.get(position).firstImg,holder.ivImg);
         holder.tvTitle.setOnClickListener(holder);
         holder.tvSource.setOnClickListener(holder);
         holder.setPosition(position);

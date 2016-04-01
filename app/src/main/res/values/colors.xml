@@ -8,6 +8,9 @@
     <color name="customizeColorPrimaryDark">#87CEFF</color>
     <color name="customizeColorAccent">#C6E2FF</color>
 
+    <!--电影页面-->
+    <color name="customizeMovieColorPrimary">#0000FF</color>
+
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#ffffffff</color>

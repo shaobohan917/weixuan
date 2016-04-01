@@ -1,6 +1,5 @@
 package com.wx.show.wxnews.entity;
 
-import retrofit.http.Field;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
@@ -25,15 +24,23 @@ public interface APIService {
     Observable<News> getNewsData(@Query("pno") int pno, @Query("ps") int ps, @Query("key") String key);
 
     /**
-     * 获取笑话
-     *
-     * @param page     当前页数，默认1
-     * @param pagesize 每页返回条数，最大20，默认1
-     * @param key
+     * 获取正在上映的电影
      * @return
      */
-    @GET("joke/img/text.from")
-    Observable<Joke> getJokeData(@Query("page") int page, @Query("pagesize") int pagesize, @Query("key") String key);
+    @GET("movie/in_theaters")
+    Observable<Movie> getMovieInTheater();
+    /**
+     * 获取即将上映的电影
+     * @return
+     */
+    @GET("movie/coming_soon")
+    Observable<Movie> getMovieComingSoon();
+    /**
+     * 搜索电影
+     * @return
+     */
+    @GET("movie/search")
+    Observable<Movie> getMovieSearch(@Query("q") String movieSearch);
 
     /**
      *
@@ -56,10 +63,10 @@ public interface APIService {
     @GET("start-image/1080*1776")
     Observable<SplashImg> getSplashImg();
 
-    @GET("20160329")
-    Observable<ZhihuDaily> getZhihuDaily();
+    @GET("news/before/{date}")
+    Observable<ZhihuDaily> getZhihuDaily(@Path("date") String date);
 
-    @GET()
-    Observable<ZhihuNews> getZhihuNews(@Path("newsId") String newsId);
+    @GET("news/{id}")
+    Observable<ZhihuNews> getZhihuNews(@Path("id") int newsId);
 
 }
