@@ -22,19 +22,21 @@
             app:theme="@style/AppTheme.AppBarOverlay" />
 
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></android.support.v4.view.ViewPager>
+
         <it.neokree.materialtabs.MaterialTabHost
             android:id="@+id/materialTabHost"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_weight="0"
             app:accentColor="@color/customizeColorAccent"
             app:hasIcons="true"
             app:primaryColor="@color/customizeColorPrimary"
             app:textColor="#FFFFFF" />
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v4.view.ViewPager>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView

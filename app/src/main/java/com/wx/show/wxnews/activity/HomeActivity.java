@@ -67,15 +67,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<Movie.SubjectsBean> mMvoieCoomingSoonData;
     private ArrayList<BookCatalog.ResultBean> mBookData;
     private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
-//    private ArrayList<News.ResultBean.ListBean> mNewsData;
 
-    private String newsUrl = "http://v.juhe.cn/";
     private String doubanBaseUrl = "https://api.douban.com/v2/";
     private String bookUrl = "http://apis.juhe.cn/";
-
     private String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
 
-    private String newsKey = "220c2251d82b641a400a4694d18ee8dd";    //申请的key，过期要更换
     private String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
     private int mNewsPage = 1;
     private BookFragment bookFragment;

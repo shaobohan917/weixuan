@@ -10,9 +10,11 @@ import android.view.Window;
 import com.umeng.analytics.MobclickAgent;
 import com.wx.show.wxnews.entity.APIService;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Luka on 2016/3/23.
@@ -24,18 +26,22 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     public APIService getUrlService(String url) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(url)
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         APIService service = retrofit.create(APIService.class);
         return service;
     }
-
 
     public void showLoading() {
         showLoading("请稍后");
@@ -90,9 +96,11 @@ public class BaseActivity extends AppCompatActivity {
         MobclickAgent.onPause(this);
     }
 
-    public void mStartActivity(Intent intent, boolean needFinish){
+    public void mStartActivity(Intent intent, boolean needFinish) {
         startActivity(intent);
-        if(needFinish){finish();}
+        if (needFinish) {
+            finish();
+        }
         overridePendingTransition(android.support.v7.appcompat.R.anim.abc_slide_in_bottom, android.support.v7.appcompat.R.anim.abc_slide_out_bottom);
     }
 }
