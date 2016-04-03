@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.Window;
 
+import com.roger.catloadinglibrary.CatLoadingView;
 import com.umeng.analytics.MobclickAgent;
 import com.wx.show.wxnews.entity.APIService;
 
@@ -20,8 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Luka on 2016/3/23.
  */
 public class BaseActivity extends AppCompatActivity {
-    private ProgressDialog mLoadingDialog;
-    public boolean dismissLoadingDialog = true;
+    private CatLoadingView loadingView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,24 +45,9 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        showLoading("请稍后");
-    }
-
-    /**
-     * 显示Dialog
-     *
-     * @canReturn
-     */
-    public void showLoading(String content) {
-        if (mLoadingDialog == null) {
-            mLoadingDialog = new ProgressDialog(this);
-            mLoadingDialog.setCanceledOnTouchOutside(false);
-            mLoadingDialog.setMessage(content);
-            Window window = mLoadingDialog.getWindow();
-            window.setGravity(Gravity.CENTER);
-        }
-        if (!isFinishing()) {
-            mLoadingDialog.show();
+        if(loadingView==null){
+            loadingView = new CatLoadingView();
+            loadingView.show(getSupportFragmentManager(), "");
         }
     }
 
@@ -70,20 +55,16 @@ public class BaseActivity extends AppCompatActivity {
      * 隐藏Dialog
      */
     public void disLoading() {
-        dismissLoadingDialog();
-    }
-
-    public void dismissLoadingDialog() {
-        if (!isFinishing() && mLoadingDialog != null && dismissLoadingDialog) {
-            mLoadingDialog.hide();
+        if (!isFinishing() && loadingView != null){
+            loadingView.dismiss();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
+        if (loadingView != null && loadingView.isVisible()) {
+            loadingView.dismiss();
         }
     }
 
