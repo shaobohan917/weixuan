@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 @SuppressLint("ValidFragment")
-public class ZhihuDailyFragment extends Fragment {
+public class ZhihuDailyFragment extends Fragment implements PullLoadMoreRecyclerView.PullLoadMoreListener{
 
     private PullLoadMoreRecyclerView mRecyclerView;
     private HomeActivity activity;
@@ -39,8 +39,8 @@ public class ZhihuDailyFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_main, null);
         mRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLinearLayout();
-        mRecyclerView.setPullRefreshEnable(false);
         mRecyclerView.setPushRefreshEnable(false);
+        mRecyclerView.setOnPullLoadMoreListener(this);
         return view;
     }
 
@@ -59,5 +59,15 @@ public class ZhihuDailyFragment extends Fragment {
         }
         mRecyclerView.setPullLoadMoreCompleted();
         activity.disLoading();
+    }
+
+    @Override
+    public void onRefresh() {
+        activity.getZhihuDailyByRxJava();
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }

@@ -11,16 +11,6 @@ public interface APIService {
 //    @GET("")
 //    Call<Movie> loadMovie(@Query("pno") int pno,@Query("ps") int ps,@Query("dtype") String dtype, @Query("key") String key);
 
-    /**
-     * 获取文章
-     *
-     * @param pno 当前页数，默认1
-     * @param ps  每页返回条数，最大100，默认20
-     * @param key
-     * @return
-     */
-    @GET("weixin/query")
-    Observable<News> getNewsData(@Query("pno") int pno, @Query("ps") int ps, @Query("key") String key);
 
     /**
      * 获取正在上映的电影
@@ -77,5 +67,9 @@ public interface APIService {
      */
     @GET("news/{id}")
     Observable<ZhihuNews> getZhihuNews(@Path("id") int newsId);
+
+    @GET("event/list")
+    Observable<Event> getEvent(@Query("loc") String loc,@Query("day_type") String day_type,@Query("type") String type);
+//    loc=108296&day_type=future&type=all
 
 }

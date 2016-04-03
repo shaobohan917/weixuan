@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.base.BaseActivity;
-import com.wx.show.wxnews.entity.News;
+import com.wx.show.wxnews.entity.APIService;
 import com.wx.show.wxnews.entity.SplashImg;
 import com.wx.show.wxnews.util.ToastUtil;
 
@@ -16,6 +16,9 @@ import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -35,7 +38,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-//        getImgByRxJava();
+        getImgByRxJava();
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -44,14 +47,16 @@ public class SplashActivity extends BaseActivity {
                 mStartActivity(intent, true);
             }
         };
-        timer.schedule(timerTask, 500);
+        timer.schedule(timerTask, 3000);
     }
 
     /**
      * 获取数据
      */
     public void getImgByRxJava() {
-        Observable<SplashImg> observable = getUrlService(imgUrl).getSplashImg();
+        Observable<SplashImg> observable = new Retrofit.Builder().baseUrl(imgUrl).addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build().create(APIService.class).getSplashImg();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SplashImg>() {
                     @Override

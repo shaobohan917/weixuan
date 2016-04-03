@@ -39,7 +39,7 @@ public class MovieFragment extends Fragment  {
     @Bind(R.id.materialTabHost)
     MaterialTabHost tabHost;
     @Bind(R.id.search_View)
-    public android.widget.SearchView searchView;
+    public SearchView searchView;
     @Bind(R.id.recyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
 
@@ -61,6 +61,8 @@ public class MovieFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie, null);
         ButterKnife.bind(this, view);
+        mRecyclerView.setPullRefreshEnable(false);
+        mRecyclerView.setPushRefreshEnable(false);
 //        searchView.setOnSearchClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -68,14 +70,14 @@ public class MovieFragment extends Fragment  {
 //                searchView.setBackgroundResource(R.color.white);
 //            }
 //        });
-        searchView.setOnCloseListener(new android.widget.SearchView.OnCloseListener() {
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 mMovieViewPager.setVisibility(View.VISIBLE);
                 return false;
             }
         });
-        searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 activity.getMovieSearch(query);

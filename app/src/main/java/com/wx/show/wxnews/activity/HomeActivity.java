@@ -20,12 +20,12 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.base.BaseActivity;
 import com.wx.show.wxnews.entity.BookCatalog;
+import com.wx.show.wxnews.entity.Event;
 import com.wx.show.wxnews.entity.Movie;
-import com.wx.show.wxnews.entity.News;
 import com.wx.show.wxnews.entity.ZhihuDaily;
 import com.wx.show.wxnews.fragment.BookFragment;
 import com.wx.show.wxnews.fragment.MovieFragment;
-import com.wx.show.wxnews.fragment.NewsFragment;
+import com.wx.show.wxnews.fragment.EventFragment;
 import com.wx.show.wxnews.fragment.ZhihuDailyFragment;
 import com.wx.show.wxnews.util.DateUtil;
 import com.wx.show.wxnews.util.ToastUtil;
@@ -49,7 +49,7 @@ import rx.schedulers.Schedulers;
  * Created by Luka on 2016/3/24.
  * E-mail:397308937@qq.com
  */
-public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, MaterialTabListener, ViewPager.OnPageChangeListener {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, MaterialTabListener, ViewPager.OnPageChangeListener,PullLoadMoreRecyclerView.PullLoadMoreListener {
     @Bind(R.id.vp_content)
     ViewPager mViewPager;
     @Bind(R.id.materialTabHost)
@@ -67,7 +67,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<Movie.SubjectsBean> mMvoieCoomingSoonData;
     private ArrayList<Movie.SubjectsBean> mMovieSearchData;
     private ArrayList<BookCatalog.ResultBean> mBookData;
-
+    private ArrayList<Event.EventsBean> mEventData;
     private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
     private String doubanBaseUrl = "https://api.douban.com/v2/";
     private String bookUrl = "http://apis.juhe.cn/";
@@ -78,11 +78,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private BookFragment bookFragment;
     private MovieFragment movieFragment;
     private ZhihuDailyFragment zhihuDailyFragment;
-    private NewsFragment newsFragment;
+    private EventFragment eventFragment;
     private String tag = "HomeActivity";
     private ArrayList<Drawable> mIconList;
     private ActionBarDrawerToggle mDrawerToggle;
     private int mCurrent;
+
 
 
     @Override
@@ -127,7 +128,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initData() {
-//        mNewsData = new ArrayList<>();
+        mEventData = new ArrayList<>();
         mZhihuData = new ArrayList<>();
         mBookData = new ArrayList<>();
         mMvoieInTheaterData = new ArrayList<>();
@@ -137,8 +138,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mIconList = new ArrayList();
         mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_movie_creation_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_photo_size_select_actual_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_import_contacts_black_48dp));
-//        mIconList.add(getResources().getDrawable(R.mipmap.ic_wb_incandescent_black_48dp));
         for (int i = 0; i < mIconList.size(); i++) {
             tabHost.addTab(
                     tabHost.newTab()
@@ -149,12 +150,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         //添加fragment
         bookFragment = new BookFragment(this);
         movieFragment = new MovieFragment(this);
-//        newsFragment = new NewsFragment(this);
+        eventFragment = new EventFragment(this);
         zhihuDailyFragment = new ZhihuDailyFragment(this);
         mFragmentList.add(zhihuDailyFragment);
         mFragmentList.add(movieFragment);
+        mFragmentList.add(eventFragment);
         mFragmentList.add(bookFragment);
-//        mFragmentList.add(newsFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -193,34 +194,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     /**
      * 获取数据
      */
-//    public void getNewsByRxJava() {
-//        Observable<News> observable = getUrlService(newsUrl).getNewsData(mNewsPage, 20, newsKey);
-//        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<News>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        newsFragment.setData(mNewsData);
-//                        disLoading();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onNext(News news) {
-//                        if (news.error_code == 0 && news.result != null) {
-//                            if (mNewsPage == 1) {
-//                                mNewsData.clear();
-//                            }
-//                            mNewsData.addAll(news.result.list);
-//                        } else {
-//                            ToastUtil.showToast(HomeActivity.this, news.error_code + ":" + news.reason);
-//                        }
-//                    }
-//                });
-//    }
 
     public void getBookCatalogByRxJava() {
         Observable<BookCatalog> observable = getUrlService(bookUrl).getBookCatalogData(bookKey);
@@ -326,7 +299,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onCompleted() {
                         zhihuDailyFragment.setData(mZhihuData);
-                        disLoading();
                     }
 
                     @Override
@@ -336,7 +308,30 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     @Override
                     public void onNext(ZhihuDaily zhihu) {
+                        mZhihuData.clear();
                         mZhihuData.addAll(zhihu.stories);
+                    }
+                });
+    }
+
+    public void getEvent() {
+        Observable<Event> observable = getUrlService(doubanBaseUrl).getEvent("108296","future","all");
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Event>() {
+                    @Override
+                    public void onCompleted() {
+                        eventFragment.setData(mEventData);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Event en) {
+                        mEventData.clear();
+                        mEventData.addAll(en.events);
                     }
                 });
     }
@@ -344,25 +339,25 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     /**
      * 监听
      */
-//    @Override
-//    public void onRefresh() {
-//        switch (mCurrent) {
-//            case 0:
+    @Override
+    public void onRefresh() {
+        switch (mCurrent) {
+            case 0:
 //                mNewsPage = 1;
-////                getNewsByRxJava();
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    public void onLoadMore() {
-//        switch (mCurrent) {
-//            case 0:
-//                mNewsPage++;
-////                getNewsByRxJava();
-//                break;
-//        }
-//    }
+//                getZhihuDailyByRxJava();
+                break;
+        }
+    }
+
+    @Override
+    public void onLoadMore() {
+        switch (mCurrent) {
+            case 0:
+                mNewsPage++;
+//                getNewsByRxJava();
+                break;
+        }
+    }
 
     @Override
     public void onBackPressed() {

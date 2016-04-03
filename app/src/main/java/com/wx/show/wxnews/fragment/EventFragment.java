@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
-import com.wx.show.wxnews.adapter.HomeNewsAdapter;
-import com.wx.show.wxnews.entity.News;
+import com.wx.show.wxnews.adapter.HomeEventAdapter;
+import com.wx.show.wxnews.entity.Event;
 
 import java.util.List;
 
@@ -21,16 +21,16 @@ import java.util.List;
  */
 
 @SuppressLint("ValidFragment")
-public class NewsFragment extends Fragment {
+public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.PullLoadMoreListener{
 
     private PullLoadMoreRecyclerView mRecyclerView;
     private HomeActivity activity;
-    private HomeNewsAdapter mAdapter;
+    private HomeEventAdapter mAdapter;
 
-    public NewsFragment() {
+    public EventFragment() {
     }
 
-    public NewsFragment(HomeActivity activity) {
+    public EventFragment(HomeActivity activity) {
         this.activity = activity;
     }
 
@@ -39,23 +39,34 @@ public class NewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_main, null);
         mRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLinearLayout();
-//        mRecyclerView.setOnPullLoadMoreListener(activity);
+        mRecyclerView.setPushRefreshEnable(false);
+        mRecyclerView.setOnPullLoadMoreListener(this);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        activity.getNewsByRxJava();
+        activity.getEvent();
     }
 
-    public void setData(List<News.ResultBean.ListBean> data) {
+    public void setData(List<Event.EventsBean> data) {
         if (mAdapter == null) {
-            mAdapter = new HomeNewsAdapter(activity, data);
+            mAdapter = new HomeEventAdapter(activity, data);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();
         }
         mRecyclerView.setPullLoadMoreCompleted();
+    }
+
+    @Override
+    public void onRefresh() {
+        activity.getEvent();
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }
