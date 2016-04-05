@@ -4,13 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.wx.show.wxnews.activity.HomeActivity"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+    <RelativeLayout
+        android:id="@+id/rl_city"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:visibility="gone">
 
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            android:text="定位城市" />
+
+        <TextView
+            android:id="@+id/tv_city_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:drawableEnd="@drawable/right_arrow"
+            android:gravity="center_vertical"
+            android:text="更多城市" />
+    </RelativeLayout>
+
+
+    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

@@ -21,6 +21,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Luka on 2016/3/23.
  */
 public class BaseActivity extends AppCompatActivity {
+    public String doubanBaseUrl = "https://api.douban.com/v2/";
+    public String bookUrl = "http://apis.juhe.cn/";
+
+    public String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
+    public String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
+
     private CatLoadingView loadingView;
 
     @Override

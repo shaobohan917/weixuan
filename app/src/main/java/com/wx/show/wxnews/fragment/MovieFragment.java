@@ -47,8 +47,6 @@ public class MovieFragment extends Fragment  {
     public SearchView searchView;
     @Bind(R.id.recyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
-    @Bind(R.id.tv_loc)
-    TextView tvLoc;
 
     private HomeMovieAdapter mAdapter;
 
@@ -232,9 +230,4 @@ public class MovieFragment extends Fragment  {
         searchOpen = true;
         activity.disLoading();
     }
-
-    public void setLocation(String location){
-        tvLoc.setText("当前定位城市:"+location);
-    }
-
 }

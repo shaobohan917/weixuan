@@ -79,11 +79,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<BookCatalog.ResultBean> mBookData;
     private ArrayList<Event.EventsBean> mEventData;
     private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
-    private String doubanBaseUrl = "https://api.douban.com/v2/";
-    private String bookUrl = "http://apis.juhe.cn/";
 
-    private String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
-    private String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
     private int mNewsPage = 1;
     private BookFragment bookFragment;
     private MovieFragment movieFragment;
@@ -96,6 +92,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
+    private String mLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,10 +107,26 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mLocationClient.start();
 
         initView();
-        initData();
+        initTab();
+//        initData();
         initListener();
     }
 
+    private void initTab() {
+        //添加标题
+        mIconList = new ArrayList();
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_movie_creation_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_photo_size_select_actual_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_import_contacts_black_48dp));
+        for (int i = 0; i < mIconList.size(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setIcon(mIconList.get(i))
+                            .setTabListener(this)
+            );
+        }
+    }
 
 
     private void initLocation(){
@@ -140,9 +153,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         @Override
         public void onReceiveLocation(BDLocation location) {
             //设置定位城市
-            if(movieFragment!=null){
-                movieFragment.setLocation( location.getCity());
-            }
+            mLocation = location.getCity();
+            initData();
             //Receive Location
             StringBuffer sb = new StringBuffer(256);
             sb.append("time : ");
@@ -243,23 +255,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mMvoieInTheaterData = new ArrayList<>();
         mMvoieCoomingSoonData = new ArrayList<>();
         mMovieSearchData = new ArrayList();
-        //添加标题
-        mIconList = new ArrayList();
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_movie_creation_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_photo_size_select_actual_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_import_contacts_black_48dp));
-        for (int i = 0; i < mIconList.size(); i++) {
-            tabHost.addTab(
-                    tabHost.newTab()
-                            .setIcon(mIconList.get(i))
-                            .setTabListener(this)
-            );
-        }
         //添加fragment
         bookFragment = new BookFragment(this);
         movieFragment = new MovieFragment(this);
-        eventFragment = new EventFragment(this);
+        eventFragment = new EventFragment(this,mLocation);
         zhihuDailyFragment = new ZhihuDailyFragment(this);
         mFragmentList.add(zhihuDailyFragment);
         mFragmentList.add(movieFragment);
@@ -422,8 +421,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 });
     }
 
-    public void getEvent() {
-        Observable<Event> observable = getUrlService(doubanBaseUrl).getEvent("108296","future","all");
+    public void getEvent(String city) {
+        Observable<Event> observable = getUrlService(doubanBaseUrl).getEvent(city,"future","all");
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Event>() {
                     @Override

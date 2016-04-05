@@ -68,6 +68,7 @@
         <activity android:name=".activity.SettingsActivity"></activity>
         <activity android:name=".activity.AboutActivity"></activity>
         <activity android:name=".activity.ZhihuNewsActivity"></activity>
+        <activity android:name=".activity.CityActivity"></activity>
         //友盟
         <meta-data
             android:name="UMENG_APPKEY"

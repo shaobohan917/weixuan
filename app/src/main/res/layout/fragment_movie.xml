@@ -16,7 +16,7 @@
 
         <com.cjj.sva.JJSearchView
             android:id="@+id/jjsv"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true" />
 
@@ -26,15 +26,6 @@
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true" />
-
-        <TextView
-            android:drawableRight="@drawable/right_arrow"
-            android:id="@+id/tv_loc"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:text="定位城市" />
     </RelativeLayout>
 
     <RelativeLayout

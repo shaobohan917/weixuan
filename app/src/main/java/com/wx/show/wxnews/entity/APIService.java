@@ -68,8 +68,17 @@ public interface APIService {
     @GET("news/{id}")
     Observable<ZhihuNews> getZhihuNews(@Path("id") int newsId);
 
+    @GET("loc/list")
+    Observable<City> getCityList();
+
+    /**
+     * 获取活动列表
+     * @param loc       城市
+     * @param day_type  时间类型
+     * @param type      活动类型
+     * @return
+     */
     @GET("event/list")
     Observable<Event> getEvent(@Query("loc") String loc,@Query("day_type") String day_type,@Query("type") String type);
-//    loc=108296&day_type=future&type=all
 
 }
