@@ -27,6 +27,7 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     private HomeActivity activity;
     private HomeEventAdapter mAdapter;
 
+
     public EventFragment() {
     }
 

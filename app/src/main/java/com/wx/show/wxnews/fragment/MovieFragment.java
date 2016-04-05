@@ -11,7 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
+import com.cjj.sva.JJSearchView;
+import com.cjj.sva.anim.controller.JJBarWithErrorIconController;
+import com.cjj.sva.anim.controller.JJCircleToSimpleLineController;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
@@ -34,6 +38,7 @@ import it.neokree.materialtabs.MaterialTabListener;
 
 @SuppressLint("ValidFragment")
 public class MovieFragment extends Fragment  {
+
     @Bind(R.id.vp_movie)
     public ViewPager mMovieViewPager;
     @Bind(R.id.materialTabHost)
@@ -42,6 +47,8 @@ public class MovieFragment extends Fragment  {
     public SearchView searchView;
     @Bind(R.id.recyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
+    @Bind(R.id.tv_loc)
+    TextView tvLoc;
 
     private HomeMovieAdapter mAdapter;
 
@@ -52,6 +59,7 @@ public class MovieFragment extends Fragment  {
     private MovieComingSoonFragment comingSoonFragment;
     private ArrayList<String> mTitleList;
     public boolean searchOpen;
+    private boolean isOpen;
 
     public MovieFragment(HomeActivity activity) {
         this.activity = activity;
@@ -63,6 +71,22 @@ public class MovieFragment extends Fragment  {
         ButterKnife.bind(this, view);
         mRecyclerView.setPullRefreshEnable(false);
         mRecyclerView.setPushRefreshEnable(false);
+        //searchView
+        final JJSearchView mJJSearchView = (JJSearchView) view.findViewById(R.id.jjsv);
+        mJJSearchView.setController(new JJCircleToSimpleLineController());
+        mJJSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isOpen){
+                    mJJSearchView.startAnim();
+                }else{
+                    mJJSearchView.resetAnim();
+                }
+                isOpen = !isOpen;
+                searchView.setVisibility(View.VISIBLE);
+            }
+        });
+
 //        searchView.setOnSearchClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -70,6 +94,7 @@ public class MovieFragment extends Fragment  {
 //                searchView.setBackgroundResource(R.color.white);
 //            }
 //        });
+        
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -77,6 +102,7 @@ public class MovieFragment extends Fragment  {
                 return false;
             }
         });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -205,6 +231,10 @@ public class MovieFragment extends Fragment  {
 
         searchOpen = true;
         activity.disLoading();
+    }
+
+    public void setLocation(String location){
+        tvLoc.setText("当前定位城市:"+location);
     }
 
 }

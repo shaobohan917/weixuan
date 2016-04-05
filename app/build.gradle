@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //百度地图
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 repositories {
@@ -53,4 +59,11 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     //显示Loading
     compile project(':app:projectLibs:catloadinglibrary')
+    //百度地图
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/locSDK_6.23.jar')
+
+    compile project(':app:projectLibs:JJSearchViewAnim-master')
 }
+
+
