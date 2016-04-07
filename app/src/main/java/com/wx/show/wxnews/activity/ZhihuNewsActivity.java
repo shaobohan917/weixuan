@@ -46,7 +46,7 @@ public class ZhihuNewsActivity extends BaseActivity {
     }
 
     public void getZhihuNewsByRxJava() {
-        Observable<ZhihuNews> observable = getUrlService(zhihuNewsUrl).getZhihuNews(newsId);
+        Observable<ZhihuNews> observable = getUrlService(zhihuNewsUrl,true).getZhihuNews(newsId);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ZhihuNews>() {
                     @Override

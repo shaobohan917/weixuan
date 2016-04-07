@@ -12,7 +12,6 @@ import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.BookActivity;
 import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.entity.BookCatalog;
-import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.List;
 
@@ -45,11 +44,14 @@ public class HomeBookAdapter extends RecyclerView.Adapter<HomeBookAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(tag, "onBindViewHolder");
         holder.itemView.setBackgroundResource(R.drawable.recycler_bg);
-        holder.itemView.setOnClickListener(holder);
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = BookActivity.getExtraDataIntent(context, Integer.valueOf(mList.get(position).id));
+                context.startActivity(intent);
+            }
+        });
         holder.tvCatalog.setText(mList.get(position).catalog);
-        holder.tvCatalog.setOnClickListener(holder);
-        holder.setPosition(position);
     }
 
     @Override
@@ -57,29 +59,13 @@ public class HomeBookAdapter extends RecyclerView.Adapter<HomeBookAdapter.ViewHo
         return mList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_catalog)
         TextView tvCatalog;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
-
-        private int position;
-
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.tv_catalog:
-                    Intent intent = BookActivity.getExtraDataIntent(context, Integer.valueOf(mList.get(position).id));
-                    context.startActivity(intent);
-                    break;
-            }
         }
     }
 }

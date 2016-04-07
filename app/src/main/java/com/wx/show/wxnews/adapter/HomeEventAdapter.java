@@ -54,7 +54,7 @@ public class HomeEventAdapter extends RecyclerView.Adapter<HomeEventAdapter.View
         });
 
         holder.tvTitle.setText(mList.get(position).title);
-        holder.subcategoryName.setText("类型:"+mList.get(position).subcategory_name);
+        holder.subcategoryName.setText("类型:"+mList.get(position).category_name);
         holder.tvAddress.setText("地址:" + mList.get(position).address);
 
         ImageUtil.showImg(context,mList.get(position).image_lmobile,holder.ivImg);

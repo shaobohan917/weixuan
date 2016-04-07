@@ -29,13 +29,17 @@ public class BaseActivity extends AppCompatActivity {
 
     private CatLoadingView loadingView;
 
+    private ProgressDialog mLoadingDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    public APIService getUrlService(String url) {
-        showLoading();
+    public APIService getUrlService(String url,boolean isShowLoading) {
+        if(isShowLoading){
+            showLoading();
+        }
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -55,6 +59,20 @@ public class BaseActivity extends AppCompatActivity {
             loadingView = new CatLoadingView();
             loadingView.show(getSupportFragmentManager(), "");
         }
+//        showLoading("请稍后");
+    }
+
+    public void showLoading(String content) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog=new ProgressDialog(this);
+            mLoadingDialog.setCanceledOnTouchOutside(false);
+            mLoadingDialog.setMessage(content);
+            Window window = mLoadingDialog.getWindow();
+            window.setGravity(Gravity.CENTER);
+        }
+        if (!isFinishing()){
+            mLoadingDialog.show();
+        }
     }
 
     /**
@@ -64,6 +82,10 @@ public class BaseActivity extends AppCompatActivity {
         if (!isFinishing() && loadingView != null){
             loadingView.dismiss();
         }
+
+//        if (!isFinishing() && mLoadingDialog != null) {
+//            mLoadingDialog.hide();
+//        }
     }
 
     @Override

@@ -14,10 +14,13 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.CityActivity;
 import com.wx.show.wxnews.activity.HomeActivity;
+import com.wx.show.wxnews.adapter.CityAdapter;
 import com.wx.show.wxnews.adapter.HomeEventAdapter;
+import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
 import com.wx.show.wxnews.util.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,7 +37,10 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     private static final int CITY_NAME = 1;
     private String location;
     private HomeActivity activity;
-    private HomeEventAdapter mAdapter;
+    private HomeEventAdapter mEventAdapter;
+    private ArrayList<City.LocsBean> mCityList;
+    private CityAdapter mCityAdapter;
+
     @Bind(R.id.recyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
     @Bind(R.id.rl_city)
@@ -42,8 +48,10 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     @Bind(R.id.tv_city)
     TextView tvCity;
     @Bind(R.id.tv_city_more)
+
     TextView tvCityMore;
     private String cityId;
+    private boolean isContain;
 
 
     public EventFragment() {
@@ -55,17 +63,21 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_main, null);
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_main, container,false);
         ButterKnife.bind(this,view);
+
         rlCity.setVisibility(View.VISIBLE);
+        final String cityLoc = "当前定位城市:"+location.substring(0,2);
         if(tvCity!=null){
-            tvCity.setText("当前定位城市:"+location.substring(0,2));
+            tvCity.setText(cityLoc);
         }
         tvCityMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, CityActivity.class);
+                intent.putExtra("cityLoc",cityLoc);
+                intent.putExtra("cityList",mCityList);
                 startActivityForResult(intent,CITY_NAME);
             }
         });
@@ -78,22 +90,42 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        activity.getEvent("108296");
+        activity.getCityList();
     }
 
-    public void setData(List<Event.EventsBean> data) {
-        if (mAdapter == null) {
-            mAdapter = new HomeEventAdapter(activity, data);
-            mRecyclerView.setAdapter(mAdapter);
+    private void getLocEvent() {
+        for(City.LocsBean city:mCityList){
+            if(location.contains(city.name)){
+                activity.getCityEvent(city.id);
+                isContain = true;
+            }
+        }
+        if (!isContain) {
+            //没有该城市，显示上海
+            activity.getCityEvent("108296");
+            ToastUtil.showToast(activity, "无法获取您所在城市的活动/n为您显示上海的活动");
+        }
+    }
+
+    public void setEventData(List<Event.EventsBean> data) {
+        if (mEventAdapter == null) {
+            mEventAdapter = new HomeEventAdapter(activity, data);
+            mRecyclerView.setAdapter(mEventAdapter);
         } else {
-            mAdapter.notifyDataSetChanged();
+            mEventAdapter.notifyDataSetChanged();
         }
         mRecyclerView.setPullLoadMoreCompleted();
+        activity.disLoading();
+    }
+
+    public void getCityList(ArrayList list){
+        mCityList = list;
+        getLocEvent();
     }
 
     @Override
     public void onRefresh() {
-        activity.getEvent(cityId);
+        activity.getCityEvent(cityId);
     }
 
     @Override
@@ -111,7 +143,7 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         cityId = data.getStringExtra("cityId");
-        activity.getEvent(cityId);
+        activity.getCityEvent(cityId);
         tvCity.setText("当前城市:"+data.getStringExtra("cityName"));
     }
 

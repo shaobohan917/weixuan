@@ -23,11 +23,11 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.MapView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.base.BaseActivity;
 import com.wx.show.wxnews.entity.BookCatalog;
+import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
 import com.wx.show.wxnews.entity.Movie;
 import com.wx.show.wxnews.entity.ZhihuDaily;
@@ -79,6 +79,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<BookCatalog.ResultBean> mBookData;
     private ArrayList<Event.EventsBean> mEventData;
     private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
+    private ArrayList<City.LocsBean> mCityData;
 
     private int mNewsPage = 1;
     private BookFragment bookFragment;
@@ -255,6 +256,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mMvoieInTheaterData = new ArrayList<>();
         mMvoieCoomingSoonData = new ArrayList<>();
         mMovieSearchData = new ArrayList();
+        mCityData = new ArrayList<>();
         //添加fragment
         bookFragment = new BookFragment(this);
         movieFragment = new MovieFragment(this);
@@ -304,7 +306,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
      */
 
     public void getBookCatalogByRxJava() {
-        Observable<BookCatalog> observable = getUrlService(bookUrl).getBookCatalogData(bookKey);
+        Observable<BookCatalog> observable = getUrlService(bookUrl,false).getBookCatalogData(bookKey);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BookCatalog>() {
                     @Override
@@ -332,7 +334,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getMovieInTheater() {
-        Observable<Movie> observable = getUrlService(doubanBaseUrl).getMovieInTheater();
+        Observable<Movie> observable = getUrlService(doubanBaseUrl,true).getMovieInTheater();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Movie>() {
                     @Override
@@ -355,7 +357,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getMovieComingSoon() {
-        Observable<Movie> observable = getUrlService(doubanBaseUrl).getMovieComingSoon();
+        Observable<Movie> observable = getUrlService(doubanBaseUrl,true).getMovieComingSoon();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Movie>() {
                     @Override
@@ -377,7 +379,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getMovieSearch(String movieSearch) {
-        Observable<Movie> observable = getUrlService(doubanBaseUrl).getMovieSearch(movieSearch);
+        Observable<Movie> observable = getUrlService(doubanBaseUrl,true).getMovieSearch(movieSearch);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Movie>() {
                     @Override
@@ -400,7 +402,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getZhihuDailyByRxJava() {
-        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl).getZhihuDaily(DateUtil.getCurrentDate());
+        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl,true).getZhihuDaily(DateUtil.getCurrentDate());
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ZhihuDaily>() {
                     @Override
@@ -421,13 +423,35 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 });
     }
 
-    public void getEvent(String city) {
-        Observable<Event> observable = getUrlService(doubanBaseUrl).getEvent(city,"future","all");
+    public void getCityList() {
+        Observable<City> observable = getUrlService(doubanBaseUrl,false).getCityList();
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<City>() {
+            @Override
+            public void onCompleted() {
+//                eventFragment.setCityListData(mCityData);
+                eventFragment.getCityList(mCityData);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(City city) {
+                mCityData.clear();
+                mCityData.addAll(city.locs);
+            }
+        });
+    }
+
+    public void getCityEvent(String cityId) {
+        Observable<Event> observable = getUrlService(doubanBaseUrl,false).getEvent(cityId,"future","all");
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Event>() {
                     @Override
                     public void onCompleted() {
-                        eventFragment.setData(mEventData);
+                        eventFragment.setEventData(mEventData);
                     }
 
                     @Override
