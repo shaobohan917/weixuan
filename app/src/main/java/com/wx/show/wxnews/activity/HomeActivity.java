@@ -68,8 +68,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     Toolbar toolbar;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-//    @Bind(R.id.bmapView)
-//    MapView mMapView;
+
 
     private List<Fragment> mFragmentList = new ArrayList<>();//页卡视图集合
 
@@ -106,6 +105,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mLocationClient.registerLocationListener( myListener );    //注册监听函数
         initLocation();
         mLocationClient.start();
+
 
         initView();
         initTab();
@@ -446,7 +446,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getCityEvent(String cityId) {
-        Observable<Event> observable = getUrlService(doubanBaseUrl,false).getEvent(cityId,"future","all");
+        Observable<Event> observable = getUrlService(doubanBaseUrl,true).getEvent(cityId,"future","all");
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Event>() {
                     @Override
