@@ -13,8 +13,20 @@ public class DateUtil {
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    public static String getCurrentDate() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+    /**
+     *
+     * @param type 返回类型：date,time
+     * @return
+     */
+    public static String getCurrentDate(String type) {
+        SimpleDateFormat format;
+        if (type.equals("date")) {
+            format = new SimpleDateFormat("yyyyMMdd");
+        } else if (type.equals("time")) {
+            format = new SimpleDateFormat("yyyyMMddHHmmss");
+        } else {
+            format = new SimpleDateFormat("yyyy");
+        }
         Date date = new Date(System.currentTimeMillis());
         String str = format.format(date);
         return str;

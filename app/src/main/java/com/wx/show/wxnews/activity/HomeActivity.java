@@ -30,10 +30,11 @@ import com.wx.show.wxnews.entity.BookCatalog;
 import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
 import com.wx.show.wxnews.entity.Movie;
+import com.wx.show.wxnews.entity.Music;
 import com.wx.show.wxnews.entity.ZhihuDaily;
-import com.wx.show.wxnews.fragment.BookFragment;
 import com.wx.show.wxnews.fragment.MovieFragment;
 import com.wx.show.wxnews.fragment.EventFragment;
+import com.wx.show.wxnews.fragment.MusicFragment;
 import com.wx.show.wxnews.fragment.ZhihuDailyFragment;
 import com.wx.show.wxnews.util.DateUtil;
 import com.wx.show.wxnews.util.ToastUtil;
@@ -79,9 +80,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<Event.EventsBean> mEventData;
     private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
     private ArrayList<City.LocsBean> mCityData;
+    private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicTaiwanData;
+    private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicJapanData;
 
     private int mNewsPage = 1;
-    private BookFragment bookFragment;
+//    private BookFragment bookFragment;
+    private MusicFragment musicFragment;
     private MovieFragment movieFragment;
     private ZhihuDailyFragment zhihuDailyFragment;
     private EventFragment eventFragment;
@@ -116,10 +120,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private void initTab() {
         //添加标题
         mIconList = new ArrayList();
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_movie_creation_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_photo_size_select_actual_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_import_contacts_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_volume_up_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_videocam_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_library_music_black_48dp));
+//        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
         for (int i = 0; i < mIconList.size(); i++) {
             tabHost.addTab(
                     tabHost.newTab()
@@ -257,15 +261,17 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mMvoieCoomingSoonData = new ArrayList<>();
         mMovieSearchData = new ArrayList();
         mCityData = new ArrayList<>();
+        mMusicTaiwanData = new ArrayList<>();
+        mMusicJapanData = new ArrayList<>();
         //添加fragment
-        bookFragment = new BookFragment(this);
-        movieFragment = new MovieFragment(this);
         eventFragment = new EventFragment(this,mLocation);
+        musicFragment = new MusicFragment(this);
+//        movieFragment = new MovieFragment(this);
         zhihuDailyFragment = new ZhihuDailyFragment(this);
-        mFragmentList.add(zhihuDailyFragment);
-        mFragmentList.add(movieFragment);
+//        mFragmentList.add(movieFragment);
+        mFragmentList.add(musicFragment);
         mFragmentList.add(eventFragment);
-        mFragmentList.add(bookFragment);
+        mFragmentList.add(zhihuDailyFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -305,33 +311,33 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
      * 获取数据
      */
 
-    public void getBookCatalogByRxJava() {
-        Observable<BookCatalog> observable = getUrlService(bookUrl,false).getBookCatalogData(bookKey);
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BookCatalog>() {
-                    @Override
-                    public void onCompleted() {
-                        bookFragment.setData(mBookData);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(BookCatalog bookCatalog) {
-                        if (bookCatalog.error_code == 0 && bookCatalog.result != null) {
-                            if (mNewsPage == 1) {
-                                mBookData.clear();
-                            }
-                            mBookData.addAll(bookCatalog.result);
-                        } else {
-                            ToastUtil.showToast(HomeActivity.this, bookCatalog.error_code + ":" + bookCatalog.reason);
-                        }
-                    }
-                });
-    }
+//    public void getBookCatalogByRxJava() {
+//        Observable<BookCatalog> observable = getUrlService(bookUrl,false).getBookCatalogData(bookKey);
+//        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<BookCatalog>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        bookFragment.setData(mBookData);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onNext(BookCatalog bookCatalog) {
+//                        if (bookCatalog.error_code == 0 && bookCatalog.result != null) {
+//                            if (mNewsPage == 1) {
+//                                mBookData.clear();
+//                            }
+//                            mBookData.addAll(bookCatalog.result);
+//                        } else {
+//                            ToastUtil.showToast(HomeActivity.this, bookCatalog.error_code + ":" + bookCatalog.reason);
+//                        }
+//                    }
+//                });
+//    }
 
     public void getMovieInTheater() {
         Observable<Movie> observable = getUrlService(doubanBaseUrl,true).getMovieInTheater();
@@ -402,7 +408,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getZhihuDailyByRxJava() {
-        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl,true).getZhihuDaily(DateUtil.getCurrentDate());
+        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl,true).getZhihuDaily(DateUtil.getCurrentDate("date"));
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ZhihuDaily>() {
                     @Override
@@ -463,6 +469,38 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onNext(Event en) {
                         mEventData.clear();
                         mEventData.addAll(en.events);
+                    }
+                });
+    }
+
+    public void getMusic(final String topic) {
+        Observable<Music> observable = getUrlService(musicUrl,true).getMusic(showapi_appid,DateUtil.getCurrentDate("time"),topic,showapi_sign);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Music>() {
+                    @Override
+                    public void onCompleted() {
+                        if(topic.equals("5")){
+                            musicFragment.setMusicTaiwanData(mMusicTaiwanData);
+                        }else if(topic.equals("17")){
+                            musicFragment.setMusicJapanData(mMusicJapanData);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Music music) {
+                        if(topic.equals("5")){
+                            mMusicTaiwanData.clear();
+                            mMusicTaiwanData.addAll(music.showapi_res_body.pagebean.songlist);
+                        }else if(topic.equals("17")){
+                            mMusicJapanData.clear();
+                            mMusicJapanData.addAll(music.showapi_res_body.pagebean.songlist);
+                        }
+
                     }
                 });
     }

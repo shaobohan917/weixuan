@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
-import com.wx.show.wxnews.adapter.HomeBookAdapter;
-import com.wx.show.wxnews.entity.BookCatalog;
+import com.wx.show.wxnews.adapter.HomeMusicAdapter;
+import com.wx.show.wxnews.entity.Music;
+import com.wx.show.wxnews.util.LogUtil;
 
 import java.util.List;
 
@@ -21,22 +22,23 @@ import java.util.List;
  */
 
 @SuppressLint("ValidFragment")
-public class BookFragment extends Fragment {
+public class MusicJapanFragment extends Fragment {
 
     private PullLoadMoreRecyclerView mRecyclerView;
     private HomeActivity activity;
-    private HomeBookAdapter mAdapter;
+    private HomeMusicAdapter mAdapter;
 
-    public BookFragment() {
+    public MusicJapanFragment() {
     }
 
-    public BookFragment(HomeActivity activity) {
+    public MusicJapanFragment(HomeActivity activity) {
         this.activity = activity;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_main, null);
+        LogUtil.d("qq","onCreateView2");
+        View view = inflater.inflate(R.layout.activity_main, container,false);
         mRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLinearLayout();
         mRecyclerView.setPullRefreshEnable(false);
@@ -46,13 +48,14 @@ public class BookFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        LogUtil.d("qq","onActivityCreated2");
         super.onActivityCreated(savedInstanceState);
-//        activity.getBookCatalogByRxJava();
+        activity.getMusic("17");
     }
 
-    public void setData(List<BookCatalog.ResultBean> data) {
+    public void setData(List<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> data) {
         if (mAdapter == null) {
-            mAdapter = new HomeBookAdapter(activity, data);
+            mAdapter = new HomeMusicAdapter(activity, data);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();

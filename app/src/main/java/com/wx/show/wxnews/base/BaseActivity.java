@@ -27,6 +27,10 @@ public class BaseActivity extends AppCompatActivity {
     public String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
     public String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
 
+    public String musicUrl = "https://route.showapi.com/";
+    public String showapi_appid = "17630";
+    public String showapi_sign = "38cfa9dd7b5946daac678594ded87981";
+
     private CatLoadingView loadingView;
 
     private ProgressDialog mLoadingDialog;

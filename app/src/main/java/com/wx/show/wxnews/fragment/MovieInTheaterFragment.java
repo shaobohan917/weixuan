@@ -12,6 +12,7 @@ import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.adapter.HomeMovieAdapter;
 import com.wx.show.wxnews.entity.Movie;
+import com.wx.show.wxnews.util.LogUtil;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class MovieInTheaterFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogUtil.d("gg","onCreateView1");
         View view = inflater.inflate(R.layout.activity_main, null);
         mRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLinearLayout();
@@ -45,6 +47,7 @@ public class MovieInTheaterFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        LogUtil.d("gg","onActivityCreated1");
         super.onActivityCreated(savedInstanceState);
         activity.getMovieInTheater();
     }

@@ -81,4 +81,8 @@ public interface APIService {
     @GET("event/list")
     Observable<Event> getEvent(@Query("loc") String loc,@Query("day_type") String day_type,@Query("type") String type);
 
+//    https://route.showapi.com/213-4?showapi_appid=17614&showapi_timestamp=20160408104259&topid=17&showapi_sign=b507e3daf46ef2289050ec57bb31662a
+    @GET("213-4")
+    Observable<Music> getMusic(@Query("showapi_appid") String showapi_appid,@Query("showapi_timestamp") String showapi_timestamp,@Query("topid") String topic,@Query("showapi_sign") String showapi_sign);
+
 }

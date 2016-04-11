@@ -1,23 +1,22 @@
 package com.wx.show.wxnews.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cjj.sva.JJSearchView;
-import com.cjj.sva.anim.controller.JJCircleToSimpleLineController;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
-import com.wx.show.wxnews.adapter.HomeMovieAdapter;
-import com.wx.show.wxnews.entity.Movie;
+import com.wx.show.wxnews.adapter.HomeMusicAdapter;
+import com.wx.show.wxnews.entity.Music;
+import com.wx.show.wxnews.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,98 +33,51 @@ import it.neokree.materialtabs.MaterialTabListener;
  */
 
 @SuppressLint("ValidFragment")
-public class MovieFragment extends Fragment  {
+public class MusicFragment extends Fragment  {
 
     @Bind(R.id.vp_music)
-    public ViewPager mMovieViewPager;
+    public ViewPager mMusicViewPager;
     @Bind(R.id.materialTabHost)
     MaterialTabHost tabHost;
-    @Bind(R.id.search_View)
-    public SearchView searchView;
     @Bind(R.id.recyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
-
-    private HomeMovieAdapter mAdapter;
 
     private HomeActivity activity;
 
     private List<Fragment> mFragmentList = new ArrayList<>();//页卡视图集合
-    private MovieInTheaterFragment inTheaterFragment;
-    private MovieComingSoonFragment comingSoonFragment;
+    private MusicTaiwanFragment musicTaiwanFragment;
+    private MusicJapanFragment musicJapanFragment;
     private ArrayList<String> mTitleList;
-    public boolean searchOpen;
-    private boolean isOpen;
 
-    public MovieFragment(HomeActivity activity) {
+    public MusicFragment(HomeActivity activity) {
         this.activity = activity;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie, null);
+        LogUtil.d("qq","onCreateView");
+        View view = inflater.inflate(R.layout.fragment_music, null);
         ButterKnife.bind(this, view);
         mRecyclerView.setPullRefreshEnable(false);
         mRecyclerView.setPushRefreshEnable(false);
-        //searchView
-        final JJSearchView mJJSearchView = (JJSearchView) view.findViewById(R.id.jjsv);
-        mJJSearchView.setController(new JJCircleToSimpleLineController());
-        mJJSearchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!isOpen){
-                    mJJSearchView.startAnim();
-                }else{
-                    mJJSearchView.resetAnim();
-                }
-                isOpen = !isOpen;
-                searchView.setVisibility(View.VISIBLE);
-            }
-        });
-
-//        searchView.setOnSearchClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //设置背景
-//                searchView.setBackgroundResource(R.color.white);
-//            }
-//        });
-        
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                mMovieViewPager.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                activity.getMovieSearch(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        inTheaterFragment = new MovieInTheaterFragment(activity);
-        comingSoonFragment = new MovieComingSoonFragment(activity);
-        mFragmentList.add(inTheaterFragment);
-        mFragmentList.add(comingSoonFragment);
+        LogUtil.d("qq","onActivityCreated");
+        musicTaiwanFragment = new MusicTaiwanFragment(activity);
+        musicJapanFragment = new MusicJapanFragment(activity);
+
+        mFragmentList.add(musicTaiwanFragment);
+        mFragmentList.add(musicJapanFragment);
 
         mRecyclerView.setLinearLayout();
         mRecyclerView.setPullRefreshEnable(false);
         mRecyclerView.setPullRefreshEnable(false);
 
-        mMovieViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mMusicViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -141,12 +93,12 @@ public class MovieFragment extends Fragment  {
 
             }
         });
-        mMovieViewPager.setAdapter(new MyPagerAdapter(activity.getSupportFragmentManager(),mFragmentList));
+        mMusicViewPager.setAdapter(new MyPagerAdapter(activity.getSupportFragmentManager(),mFragmentList));
 
         //添加标题
         mTitleList = new ArrayList();
-        mTitleList.add("正在上映");
-        mTitleList.add("即将上映");
+        mTitleList.add("港台榜");
+        mTitleList.add("日韩榜");
 
         for (int i = 0; i < mTitleList.size(); i++) {
             tabHost.addTab(
@@ -155,7 +107,7 @@ public class MovieFragment extends Fragment  {
                             .setTabListener(new MaterialTabListener() {
                                 @Override
                                 public void onTabSelected(MaterialTab tab) {
-                                    mMovieViewPager.setCurrentItem(tab.getPosition());
+                                    mMusicViewPager.setCurrentItem(tab.getPosition());
                                 }
 
                                 @Override
@@ -204,27 +156,11 @@ public class MovieFragment extends Fragment  {
         }
     }
 
-    public void setInThreaterData(List<Movie.SubjectsBean> data) {
-        inTheaterFragment.setData(data);
+    public void setMusicTaiwanData(List<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> data) {
+        musicTaiwanFragment.setData(data);
     }
 
-    public void setCoomingSoonData(List<Movie.SubjectsBean> data) {
-        comingSoonFragment.setData(data);
-    }
-
-
-    public void setSearchData(ArrayList<Movie.SubjectsBean> data){
-        mMovieViewPager.setVisibility(View.GONE);
-        if (mAdapter == null) {
-            mAdapter = new HomeMovieAdapter(activity, data);
-            mRecyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
-        }
-        mRecyclerView.setPullLoadMoreCompleted();
-        activity.disLoading();
-
-        searchOpen = true;
-        activity.disLoading();
+    public void setMusicJapanData(List<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> data) {
+        musicJapanFragment.setData(data);
     }
 }
