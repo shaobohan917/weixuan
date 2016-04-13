@@ -17,4 +17,7 @@
     <color name="black_transparent">#e0000000</color>
 
     <color name="lightPrimary_3">#96d6db</color>
+
+    <!--日期选择器-->
+    <color name="mdtp_accent_color">#FF3E96</color>
 </resources>

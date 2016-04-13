@@ -33,6 +33,32 @@
             android:text="更多城市" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_date"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:visibility="gone">
+
+
+        <TextView
+            android:id="@+id/tv_date_now"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:gravity="center_vertical"
+            android:paddingLeft="6dp"
+            android:text="定位城市" />
+
+        <TextView
+            android:id="@+id/tv_date_select"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/icon_arrow"
+            android:gravity="center_vertical"
+            android:paddingRight="6dp"
+            android:text="指定日期" />
+    </RelativeLayout>
 
     <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
         android:id="@+id/recyclerView"

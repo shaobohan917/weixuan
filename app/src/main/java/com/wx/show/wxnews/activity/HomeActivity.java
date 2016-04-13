@@ -407,8 +407,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 });
     }
 
-    public void getZhihuDailyByRxJava() {
-        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl,true).getZhihuDaily(DateUtil.getCurrentDate("date"));
+    public void getZhihuDaily(String date) {
+        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl,true).getZhihuDaily(date);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ZhihuDaily>() {
                     @Override
@@ -512,8 +512,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void onRefresh() {
         switch (mCurrent) {
             case 0:
-//                mNewsPage = 1;
-//                getZhihuDailyByRxJava();
                 break;
         }
     }
