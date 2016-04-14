@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 @SuppressLint("ValidFragment")
-public class MovieComingSoonFragment extends Fragment {
+public class MovieComingSoonFragment extends Fragment{
     private PullLoadMoreRecyclerView mRecyclerView;
     private HomeMovieAdapter mAdapter;
     private HomeActivity activity;
@@ -39,7 +39,7 @@ public class MovieComingSoonFragment extends Fragment {
         mRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLinearLayout();
         mRecyclerView.setPullRefreshEnable(false);
-        mRecyclerView.setPullRefreshEnable(false);
+        mRecyclerView.setPushRefreshEnable(false);
         return view;
     }
 
@@ -59,5 +59,4 @@ public class MovieComingSoonFragment extends Fragment {
         mRecyclerView.setPullLoadMoreCompleted();
         activity.disLoading();
     }
-
 }

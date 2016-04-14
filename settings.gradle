@@ -1,1 +1,1 @@
-include ':app',':app:projectLibs:catloadinglibrary',':app:projectLibs:JJSearchViewAnim-master'
+include ':app',':app:projectLibs:catloadinglibrary'

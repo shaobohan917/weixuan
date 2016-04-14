@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/projectLibs/JJSearchViewAnim-master/JJSearchViewAnim-master.iml" filepath="$PROJECT_DIR$/app/projectLibs/JJSearchViewAnim-master/JJSearchViewAnim-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/projectLibs/catloadinglibrary/catloadinglibrary.iml" filepath="$PROJECT_DIR$/app/projectLibs/catloadinglibrary/catloadinglibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/projectLibs/projectLibs.iml" filepath="$PROJECT_DIR$/app/projectLibs/projectLibs.iml" />

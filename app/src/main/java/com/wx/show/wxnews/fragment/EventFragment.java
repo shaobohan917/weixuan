@@ -99,7 +99,8 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     private void getLocEvent() {
         for(City.LocsBean city:mCityList){
             if(this.locCity.contains(city.name)){
-                activity.getCityEvent(city.id);
+                cityId = city.id;
+                activity.getCityEvent(cityId);
                 isContain = true;
             }
         }

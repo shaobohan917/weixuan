@@ -43,6 +43,7 @@ public class ZhihuDailyFragment extends Fragment implements PullLoadMoreRecycler
 
     private HomeActivity activity;
     private HomeZhihuDailyAdapter mAdapter;
+    private String date = DateUtil.getCurrentDate("date");
 
     public ZhihuDailyFragment() {
     }
@@ -103,7 +104,7 @@ public class ZhihuDailyFragment extends Fragment implements PullLoadMoreRecycler
 
     @Override
     public void onRefresh() {
-        activity.getZhihuDaily(DateUtil.getCurrentDate("date"));
+        activity.getZhihuDaily(date);
     }
 
     @Override
@@ -127,7 +128,7 @@ public class ZhihuDailyFragment extends Fragment implements PullLoadMoreRecycler
         if (dayOfMonth < 10) {
             day = 0 + "" + dayOfMonth;
         }
-        String date = year + month + day;
+        date = year + month + day;
         if(Integer.parseInt(date)>Integer.parseInt((DateUtil.getCurrentDate("date")))){
             ToastUtil.showToast(activity,"请选择今天以前的时间");
         }else{

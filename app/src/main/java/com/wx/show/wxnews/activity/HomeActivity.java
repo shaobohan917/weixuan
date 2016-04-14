@@ -124,9 +124,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private void initTab() {
         //添加标题
         mIconList = new ArrayList();
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_volume_up_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_videocam_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_library_music_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_volume_up_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
 //        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
         for (int i = 0; i < mIconList.size(); i++) {
             tabHost.addTab(

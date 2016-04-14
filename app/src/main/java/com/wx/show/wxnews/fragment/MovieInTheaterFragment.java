@@ -36,18 +36,16 @@ public class MovieInTheaterFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LogUtil.d("gg","onCreateView1");
         View view = inflater.inflate(R.layout.activity_main, null);
         mRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLinearLayout();
         mRecyclerView.setPullRefreshEnable(false);
-        mRecyclerView.setPullRefreshEnable(false);
+        mRecyclerView.setPushRefreshEnable(false);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        LogUtil.d("gg","onActivityCreated1");
         super.onActivityCreated(savedInstanceState);
         activity.getMovieInTheater();
     }
@@ -62,5 +60,4 @@ public class MovieInTheaterFragment extends Fragment {
         mRecyclerView.setPullLoadMoreCompleted();
         activity.disLoading();
     }
-
 }

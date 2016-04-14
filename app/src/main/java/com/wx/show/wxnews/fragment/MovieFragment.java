@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cjj.sva.JJSearchView;
-import com.cjj.sva.anim.controller.JJCircleToSimpleLineController;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
@@ -34,14 +32,14 @@ import it.neokree.materialtabs.MaterialTabListener;
  */
 
 @SuppressLint("ValidFragment")
-public class MovieFragment extends Fragment  {
+public class MovieFragment extends Fragment{
 
     @Bind(R.id.vp_music)
     public ViewPager mMovieViewPager;
     @Bind(R.id.materialTabHost)
     MaterialTabHost tabHost;
     @Bind(R.id.search_View)
-    public SearchView searchView;
+    SearchView searchView;
     @Bind(R.id.recyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
 
@@ -54,7 +52,6 @@ public class MovieFragment extends Fragment  {
     private MovieComingSoonFragment comingSoonFragment;
     private ArrayList<String> mTitleList;
     public boolean searchOpen;
-    private boolean isOpen;
 
     public MovieFragment(HomeActivity activity) {
         this.activity = activity;
@@ -64,32 +61,8 @@ public class MovieFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie, null);
         ButterKnife.bind(this, view);
-        mRecyclerView.setPullRefreshEnable(false);
         mRecyclerView.setPushRefreshEnable(false);
         //searchView
-        final JJSearchView mJJSearchView = (JJSearchView) view.findViewById(R.id.jjsv);
-        mJJSearchView.setController(new JJCircleToSimpleLineController());
-        mJJSearchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!isOpen){
-                    mJJSearchView.startAnim();
-                }else{
-                    mJJSearchView.resetAnim();
-                }
-                isOpen = !isOpen;
-                searchView.setVisibility(View.VISIBLE);
-            }
-        });
-
-//        searchView.setOnSearchClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //设置背景
-//                searchView.setBackgroundResource(R.color.white);
-//            }
-//        });
-        
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -122,8 +95,7 @@ public class MovieFragment extends Fragment  {
         mFragmentList.add(comingSoonFragment);
 
         mRecyclerView.setLinearLayout();
-        mRecyclerView.setPullRefreshEnable(false);
-        mRecyclerView.setPullRefreshEnable(false);
+        mRecyclerView.setPushRefreshEnable(false);
 
         mMovieViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
