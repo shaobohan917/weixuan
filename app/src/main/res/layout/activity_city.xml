@@ -4,19 +4,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
 
-    <!--<com.baidu.mapapi.map.MapView-->
-        <!--android:id="@+id/bmapView"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="200dp"-->
-        <!--android:clickable="true" />-->
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/iv_loc"
+            android:src="@drawable/ic_github_grey"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp" />
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/tv_city_loc"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="20dp"
+        android:gravity="center_vertical"
         android:text="当前城市"
         android:textColor="@color/black"
         android:textSize="16sp" />

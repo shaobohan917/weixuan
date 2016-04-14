@@ -10,6 +10,7 @@ import android.view.Window;
 import com.roger.catloadinglibrary.CatLoadingView;
 import com.umeng.analytics.MobclickAgent;
 import com.wx.show.wxnews.entity.APIService;
+import com.wx.show.wxnews.util.LogUtil;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -35,9 +36,12 @@ public class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog mLoadingDialog;
 
+    private String tag = "BaseActivity";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtil.d(tag, "onCreate=" + this.getClass().getName());
     }
 
     public APIService getUrlService(String url,boolean isShowLoading) {

@@ -18,6 +18,7 @@ import com.wx.show.wxnews.adapter.CityAdapter;
 import com.wx.show.wxnews.adapter.HomeEventAdapter;
 import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
+import com.wx.show.wxnews.entity.Location;
 import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ import butterknife.ButterKnife;
 public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.PullLoadMoreListener{
 
     private static final int CITY_NAME = 1;
-    private String location;
+    private Location location;
+    private String locCity;
     private HomeActivity activity;
     private HomeEventAdapter mEventAdapter;
     private ArrayList<City.LocsBean> mCityList;
@@ -57,9 +59,10 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     public EventFragment() {
     }
 
-    public EventFragment(HomeActivity activity,String location) {
+    public EventFragment(HomeActivity activity, Location location) {
         this.activity = activity;
         this.location = location;
+        locCity = location.city;
     }
 
     @Override
@@ -68,7 +71,7 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
         ButterKnife.bind(this,view);
 
         rlCity.setVisibility(View.VISIBLE);
-        final String cityLoc = "当前定位城市:"+location.substring(0,2);
+        final String cityLoc = "当前定位城市:"+ locCity.substring(0,2);
         if(tvCity!=null){
             tvCity.setText(cityLoc);
         }
@@ -76,8 +79,8 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, CityActivity.class);
-                intent.putExtra("cityLoc",cityLoc);
                 intent.putExtra("cityList",mCityList);
+                intent.putExtra("location",location);
                 startActivityForResult(intent,CITY_NAME);
             }
         });
@@ -95,7 +98,7 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
 
     private void getLocEvent() {
         for(City.LocsBean city:mCityList){
-            if(location.contains(city.name)){
+            if(this.locCity.contains(city.name)){
                 activity.getCityEvent(city.id);
                 isContain = true;
             }

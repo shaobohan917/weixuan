@@ -29,6 +29,7 @@ import com.wx.show.wxnews.base.BaseActivity;
 import com.wx.show.wxnews.entity.BookCatalog;
 import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
+import com.wx.show.wxnews.entity.Location;
 import com.wx.show.wxnews.entity.Movie;
 import com.wx.show.wxnews.entity.Music;
 import com.wx.show.wxnews.entity.ZhihuDaily;
@@ -97,6 +98,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
     private String mLocation;
+    private float radius;
+    private double latitude;
+    private double longtitude;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,9 +161,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         @Override
         public void onReceiveLocation(BDLocation location) {
-            //设置定位城市
-            mLocation = location.getCity();
-            initData();
+            //封装对象
+            Location loc = new Location();
+            loc.city = location.getCity();
+            loc.radius = location.getRadius();
+            loc.latitude = location.getLatitude();
+            loc.longtitude = location.getLongitude();
+
+            initData(loc);
             //Receive Location
             StringBuffer sb = new StringBuffer(256);
             sb.append("time : ");
@@ -253,7 +262,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mDrawerToggle.syncState();
     }
 
-    private void initData() {
+    private void initData(Location loc) {
         mEventData = new ArrayList<>();
         mZhihuData = new ArrayList<>();
         mBookData = new ArrayList<>();
@@ -264,12 +273,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mMusicTaiwanData = new ArrayList<>();
         mMusicJapanData = new ArrayList<>();
         //添加fragment
-        eventFragment = new EventFragment(this,mLocation);
-        musicFragment = new MusicFragment(this);
-//        movieFragment = new MovieFragment(this);
+        eventFragment = new EventFragment(this,loc);
+//        musicFragment = new MusicFragment(this);
+        movieFragment = new MovieFragment(this);
         zhihuDailyFragment = new ZhihuDailyFragment(this);
-//        mFragmentList.add(movieFragment);
-        mFragmentList.add(musicFragment);
+        mFragmentList.add(movieFragment);
+//        mFragmentList.add(musicFragment);
         mFragmentList.add(eventFragment);
         mFragmentList.add(zhihuDailyFragment);
 
