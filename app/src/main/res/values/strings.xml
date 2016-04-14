@@ -14,7 +14,7 @@
     <string name="save_traffic_summary_on">仅在WiFi环境下加载图片</string>
     <string name="save_traffic_summary_off">任何网络环境均加载图片</string>
     <string name="save_traffic">省流模式</string>
-    <string name="version_code">版本号\n1.3.0</string>
+    <string name="version_code">版本号\n1.3.1</string>
     <string name="tech_support">数据支持\n知乎API、豆瓣API</string>
     <string name="personal_home">个人主页\ngithub.com/LukaHan</string>
 </resources>

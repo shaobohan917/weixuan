@@ -16,11 +16,10 @@
 
         <ImageView
             android:id="@+id/iv_loc"
-            android:src="@drawable/ic_github_grey"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
-            android:layout_margin="10dp" />
+            android:layout_margin="4dp" />
     </RelativeLayout>
 
 

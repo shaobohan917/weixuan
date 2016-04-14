@@ -59,10 +59,8 @@ public class CityActivity extends BaseActivity {
         recyclerView.setGridLayout(3);
         recyclerView.setPullRefreshEnable(false);
         recyclerView.setPushRefreshEnable(false);
-        recyclerView.setGravity(Gravity.CENTER_HORIZONTAL);
         initData();
         getLoc();
-        gotoLoc();
         ivLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +91,8 @@ public class CityActivity extends BaseActivity {
         mBaiduMap.setMyLocationConfigeration(config);
         // 当不需要定位图层时关闭定位图层
         // mBaiduMap.setMyLocationEnabled(false);
+
+        gotoLoc();
     }
 
     //定位到当前位置
