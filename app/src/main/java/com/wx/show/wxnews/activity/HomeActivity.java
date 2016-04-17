@@ -61,7 +61,7 @@ import rx.schedulers.Schedulers;
  * Created by Luka on 2016/3/24.
  * E-mail:397308937@qq.com
  */
-public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, MaterialTabListener, ViewPager.OnPageChangeListener,PullLoadMoreRecyclerView.PullLoadMoreListener {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, MaterialTabListener, ViewPager.OnPageChangeListener, PullLoadMoreRecyclerView.PullLoadMoreListener {
     @Bind(R.id.vp_content)
     ViewPager mViewPager;
     @Bind(R.id.materialTabHost)
@@ -89,7 +89,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     private int mNewsPage = 1;
-//    private BookFragment bookFragment;
+    //    private BookFragment bookFragment;
     private MusicFragment musicFragment;
     private MovieFragment movieFragment;
     private ZhihuDailyFragment zhihuDailyFragment;
@@ -112,7 +112,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         ButterKnife.bind(this);
 
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-        mLocationClient.registerLocationListener( myListener );    //注册监听函数
+        mLocationClient.registerLocationListener(myListener);    //注册监听函数
         initLocation();
         mLocationClient.start();
 
@@ -140,13 +140,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-    private void initLocation(){
+    private void initLocation() {
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
         );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
 //        int span=1000;
-        int span=0;
+        int span = 0;
         option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
         option.setOpenGps(true);//可选，默认false,设置是否使用gps
@@ -277,7 +277,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mBeautyData = new ArrayList<>();
 
         //添加fragment
-        eventFragment = new EventFragment(this,loc);
+        eventFragment = new EventFragment(this, loc);
 //        musicFragment = new MusicFragment(this);
         movieFragment = new MovieFragment(this);
 //        zhihuDailyFragment = new ZhihuDailyFragment(this);
@@ -354,9 +354,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 //                    }
 //                });
 //    }
-
     public void getMovieInTheater() {
-        Observable<Movie> observable = getUrlService(doubanBaseUrl,true).getMovieInTheater();
+        Observable<Movie> observable = getUrlService(doubanBaseUrl, true).getMovieInTheater();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Movie>() {
                     @Override
@@ -379,7 +378,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getMovieComingSoon() {
-        Observable<Movie> observable = getUrlService(doubanBaseUrl,true).getMovieComingSoon();
+        Observable<Movie> observable = getUrlService(doubanBaseUrl, true).getMovieComingSoon();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Movie>() {
                     @Override
@@ -401,7 +400,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getMovieSearch(String movieSearch) {
-        Observable<Movie> observable = getUrlService(doubanBaseUrl,true).getMovieSearch(movieSearch);
+        Observable<Movie> observable = getUrlService(doubanBaseUrl, true).getMovieSearch(movieSearch);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Movie>() {
                     @Override
@@ -424,7 +423,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getZhihuDaily(String date) {
-        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl,true).getZhihuDaily(date);
+        Observable<ZhihuDaily> observable = getUrlService(zhihuDailyUrl, true).getZhihuDaily(date);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ZhihuDaily>() {
                     @Override
@@ -446,7 +445,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getCityList() {
-        Observable<City> observable = getUrlService(doubanBaseUrl,false).getCityList();
+        Observable<City> observable = getUrlService(doubanBaseUrl, false).getCityList();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<City>() {
             @Override
             public void onCompleted() {
@@ -467,7 +466,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getCityEvent(String cityId) {
-        Observable<Event> observable = getUrlService(doubanBaseUrl,true).getEvent(cityId,"future","all");
+        Observable<Event> observable = getUrlService(doubanBaseUrl, true).getEvent(cityId, "future", "all");
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Event>() {
                     @Override
@@ -489,14 +488,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getMusic(final String topic) {
-        Observable<Music> observable = getUrlService(showUrl,true).getMusic(music_appid,DateUtil.getCurrentDate("time"),topic, music_sign);
+        Observable<Music> observable = getUrlService(showUrl, true).getMusic(music_appid, DateUtil.getCurrentDate("time"), topic, music_sign);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Music>() {
                     @Override
                     public void onCompleted() {
-                        if(topic.equals("5")){
+                        if (topic.equals("5")) {
                             musicFragment.setMusicTaiwanData(mMusicTaiwanData);
-                        }else if(topic.equals("17")){
+                        } else if (topic.equals("17")) {
                             musicFragment.setMusicJapanData(mMusicJapanData);
                         }
                     }
@@ -508,10 +507,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     @Override
                     public void onNext(Music music) {
-                        if(topic.equals("5")){
+                        if (topic.equals("5")) {
                             mMusicTaiwanData.clear();
                             mMusicTaiwanData.addAll(music.showapi_res_body.pagebean.songlist);
-                        }else if(topic.equals("17")){
+                        } else if (topic.equals("17")) {
                             mMusicJapanData.clear();
                             mMusicJapanData.addAll(music.showapi_res_body.pagebean.songlist);
                         }
@@ -520,8 +519,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 });
     }
 
-    public void getBeauty(int page,int type) {
-        Observable<Beauty> observable = getUrlService(showUrl, true).getBeauty(15, page, music_appid, DateUtil.getCurrentDate("time"), type, music_sign);
+
+    public void getBeauty(int page, int type) {
+        getBeauty(page, type, false);
+    }
+    public void getBeauty(int page, int type, boolean showLoading) {
+        Observable<Beauty> observable = getUrlService(showUrl, showLoading).getBeauty(15, page, music_appid, DateUtil.getCurrentDate("time"), type, music_sign);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Beauty>() {
                     @Override
@@ -536,7 +539,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
                     @Override
                     public void onNext(Beauty beauty) {
-                        if(beautyFragment.isFirst){
+                        if (beautyFragment.isFirst) {
                             mBeautyData.clear();
                         }
                         mBeautyData.add(beauty.showapi_res_body.a0);
@@ -554,9 +557,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         mBeautyData.add(beauty.showapi_res_body.a12);
                         mBeautyData.add(beauty.showapi_res_body.a13);
                         mBeautyData.add(beauty.showapi_res_body.a14);
+
                     }
                 });
     }
+
 
     /**
      * 监听

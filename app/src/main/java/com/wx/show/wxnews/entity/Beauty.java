@@ -1,5 +1,6 @@
 package com.wx.show.wxnews.entity;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.annotations.SerializedName;
 
@@ -59,15 +60,11 @@ public class Beauty {
     }
 
     public String getJson(){
-        String jsonString = JSONObject.toJSONString(showapi_res_body);
-        return jsonString;
-    }
+        JSONObject object = new JSONObject(true);
+//        object.keySet();
+        String comment = object.getString("0");
+        ShowapiResBodyBean.PagebeanBean bean0 = JSON.parseObject(comment, ShowapiResBodyBean.PagebeanBean.class);
 
-//    public String getJson(Map<String,Object> content){
-//        JSONObject object = new JSONObject(content);
-//        String comment = object.getString("0");
-//        ShowapiResBodyBean.PagebeanBean bean0 = JSON.parseObject(comment, ShowapiResBodyBean.PagebeanBean.class);
-//
-//        return bean0.title;
-//    }
+        return bean0.title;
+    }
 }

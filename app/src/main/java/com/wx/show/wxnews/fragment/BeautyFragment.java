@@ -84,7 +84,7 @@ public class BeautyFragment extends Fragment implements PullLoadMoreRecyclerView
                         ivArrow.setImageResource(R.drawable.arrow_down);
                         tvCategory.setText(categories[which]);
                         currentCategory = 34 + which;
-                        activity.getBeauty(1, 34 + which);
+                        activity.getBeauty(1, 34 + which, true);
                     }
                 });
                 builder.show();
