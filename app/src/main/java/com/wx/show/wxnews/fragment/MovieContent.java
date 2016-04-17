@@ -12,6 +12,7 @@ import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.HomeActivity;
 import com.wx.show.wxnews.adapter.HomeMovieAdapter;
 import com.wx.show.wxnews.entity.Movie;
+import com.wx.show.wxnews.util.LogUtil;
 
 import java.util.List;
 
@@ -21,16 +22,18 @@ import java.util.List;
  */
 
 @SuppressLint("ValidFragment")
-public class MovieComingSoonFragment extends Fragment{
+public class MovieContent extends Fragment {
+    private int from;   //0正在上映 1即将上映
     private PullLoadMoreRecyclerView mRecyclerView;
     private HomeMovieAdapter mAdapter;
     private HomeActivity activity;
 
-    public MovieComingSoonFragment() {
+    public MovieContent() {
     }
 
-    public MovieComingSoonFragment(HomeActivity activity) {
+    public MovieContent(HomeActivity activity, int from) {
         this.activity = activity;
+        this.from = from;
     }
 
     @Override
@@ -46,7 +49,11 @@ public class MovieComingSoonFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        activity.getMovieComingSoon();
+        if(from==0){
+            activity.getMovieInTheater();
+        }else if(from==1){
+            activity.getMovieComingSoon();
+        }
     }
 
     public void setData(List<Movie.SubjectsBean> data) {

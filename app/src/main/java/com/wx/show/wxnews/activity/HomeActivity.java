@@ -26,6 +26,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.base.BaseActivity;
+import com.wx.show.wxnews.entity.Beauty;
 import com.wx.show.wxnews.entity.BookCatalog;
 import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
@@ -33,8 +34,9 @@ import com.wx.show.wxnews.entity.Location;
 import com.wx.show.wxnews.entity.Movie;
 import com.wx.show.wxnews.entity.Music;
 import com.wx.show.wxnews.entity.ZhihuDaily;
-import com.wx.show.wxnews.fragment.MovieFragment;
+import com.wx.show.wxnews.fragment.BeautyFragment;
 import com.wx.show.wxnews.fragment.EventFragment;
+import com.wx.show.wxnews.fragment.MovieFragment;
 import com.wx.show.wxnews.fragment.MusicFragment;
 import com.wx.show.wxnews.fragment.ZhihuDailyFragment;
 import com.wx.show.wxnews.util.DateUtil;
@@ -83,6 +85,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<City.LocsBean> mCityData;
     private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicTaiwanData;
     private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicJapanData;
+    private ArrayList<Beauty.ShowapiResBodyBean.PagebeanBean> mBeautyData;
+
 
     private int mNewsPage = 1;
 //    private BookFragment bookFragment;
@@ -90,6 +94,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private MovieFragment movieFragment;
     private ZhihuDailyFragment zhihuDailyFragment;
     private EventFragment eventFragment;
+    private BeautyFragment beautyFragment;
+
     private String tag = "HomeActivity";
     private ArrayList<Drawable> mIconList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -97,10 +103,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
-    private String mLocation;
-    private float radius;
-    private double latitude;
-    private double longtitude;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -272,15 +274,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mCityData = new ArrayList<>();
         mMusicTaiwanData = new ArrayList<>();
         mMusicJapanData = new ArrayList<>();
+        mBeautyData = new ArrayList<>();
+
         //添加fragment
         eventFragment = new EventFragment(this,loc);
 //        musicFragment = new MusicFragment(this);
         movieFragment = new MovieFragment(this);
-        zhihuDailyFragment = new ZhihuDailyFragment(this);
+//        zhihuDailyFragment = new ZhihuDailyFragment(this);
+        beautyFragment = new BeautyFragment(this);
+
         mFragmentList.add(movieFragment);
 //        mFragmentList.add(musicFragment);
         mFragmentList.add(eventFragment);
-        mFragmentList.add(zhihuDailyFragment);
+//        mFragmentList.add(zhihuDailyFragment);
+        mFragmentList.add(beautyFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -443,7 +450,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<City>() {
             @Override
             public void onCompleted() {
-//                eventFragment.setCityListData(mCityData);
                 eventFragment.getCityList(mCityData);
             }
 
@@ -483,7 +489,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getMusic(final String topic) {
-        Observable<Music> observable = getUrlService(musicUrl,true).getMusic(showapi_appid,DateUtil.getCurrentDate("time"),topic,showapi_sign);
+        Observable<Music> observable = getUrlService(showUrl,true).getMusic(music_appid,DateUtil.getCurrentDate("time"),topic, music_sign);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Music>() {
                     @Override
@@ -510,6 +516,44 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                             mMusicJapanData.addAll(music.showapi_res_body.pagebean.songlist);
                         }
 
+                    }
+                });
+    }
+
+    public void getBeauty(int page,int type) {
+        Observable<Beauty> observable = getUrlService(showUrl, true).getBeauty(15, page, music_appid, DateUtil.getCurrentDate("time"), type, music_sign);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Beauty>() {
+                    @Override
+                    public void onCompleted() {
+                        beautyFragment.setData(mBeautyData);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Beauty beauty) {
+                        if(beautyFragment.isFirst){
+                            mBeautyData.clear();
+                        }
+                        mBeautyData.add(beauty.showapi_res_body.a0);
+                        mBeautyData.add(beauty.showapi_res_body.a1);
+                        mBeautyData.add(beauty.showapi_res_body.a2);
+                        mBeautyData.add(beauty.showapi_res_body.a3);
+                        mBeautyData.add(beauty.showapi_res_body.a4);
+                        mBeautyData.add(beauty.showapi_res_body.a5);
+                        mBeautyData.add(beauty.showapi_res_body.a6);
+                        mBeautyData.add(beauty.showapi_res_body.a7);
+                        mBeautyData.add(beauty.showapi_res_body.a8);
+                        mBeautyData.add(beauty.showapi_res_body.a9);
+                        mBeautyData.add(beauty.showapi_res_body.a10);
+                        mBeautyData.add(beauty.showapi_res_body.a11);
+                        mBeautyData.add(beauty.showapi_res_body.a12);
+                        mBeautyData.add(beauty.showapi_res_body.a13);
+                        mBeautyData.add(beauty.showapi_res_body.a14);
                     }
                 });
     }

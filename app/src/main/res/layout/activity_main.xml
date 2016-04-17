@@ -60,6 +60,31 @@
             android:text="指定日期" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_catogory"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="hehe"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_category"
+            android:paddingLeft="4dp"
+            android:src="@drawable/arrow_down"
+            android:layout_width="16dp"
+            android:layout_height="16dp" />
+    </LinearLayout>
+
+
     <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

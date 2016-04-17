@@ -48,8 +48,8 @@ public class MovieFragment extends Fragment{
     private HomeActivity activity;
 
     private List<Fragment> mFragmentList = new ArrayList<>();//页卡视图集合
-    private MovieInTheaterFragment inTheaterFragment;
-    private MovieComingSoonFragment comingSoonFragment;
+    private MovieContent inTheaterFragment;
+    private MovieContent comingSoonFragment;
     private ArrayList<String> mTitleList;
     public boolean searchOpen;
 
@@ -89,8 +89,8 @@ public class MovieFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        inTheaterFragment = new MovieInTheaterFragment(activity);
-        comingSoonFragment = new MovieComingSoonFragment(activity);
+        inTheaterFragment = new MovieContent(activity,0);
+        comingSoonFragment = new MovieContent(activity,1);
         mFragmentList.add(inTheaterFragment);
         mFragmentList.add(comingSoonFragment);
 
@@ -167,12 +167,6 @@ public class MovieFragment extends Fragment{
         @Override
         public int getCount() {
             return fragments.size();
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            //注释super，防止页面被销毁
-            //super.destroyItem(container, position, object);
         }
     }
 

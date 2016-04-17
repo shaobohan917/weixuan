@@ -9,10 +9,12 @@ import android.widget.TextView;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
@@ -22,6 +24,7 @@ import com.wx.show.wxnews.adapter.CityAdapter;
 import com.wx.show.wxnews.base.BaseActivity;
 import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Location;
+import com.wx.show.wxnews.util.LogUtil;
 
 import java.util.ArrayList;
 
@@ -60,18 +63,42 @@ public class CityActivity extends BaseActivity {
         recyclerView.setPullRefreshEnable(false);
         recyclerView.setPushRefreshEnable(false);
         initData();
+        mBaiduMap = mapView.getMap();
         getLoc();
+        mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                //获取经纬度
+                double latitude = latLng.latitude;
+                double longitude = latLng.longitude;
+               LogUtil.d("hehe:","latitude=" + latitude + ",longitude=" + longitude);
+                //先清除图层
+                mBaiduMap.clear();
+                // 定义Maker坐标点
+                LatLng point = new LatLng(latitude, longitude);
+                // 构建MarkerOption，用于在地图上添加Marker
+//                MarkerOptions options = new MarkerOptions().position(point)
+//                        .icon(bitmap);
+                // 在地图上添加Marker，并显示
+//                mBaiduMap.addOverlay(options);
+            }
+
+            @Override
+            public boolean onMapPoiClick(MapPoi mapPoi) {
+                return false;
+            }
+        });
         ivLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 gotoLoc();
             }
         });
+
     }
 
     //获取当前位置
     private void getLoc() {
-        mBaiduMap = mapView.getMap();
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
 import com.wx.show.wxnews.entity.Location;
 import com.wx.show.wxnews.util.ToastUtil;
+import com.wx.show.wxnews.view.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,6 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
     private HomeActivity activity;
     private HomeEventAdapter mEventAdapter;
     private ArrayList<City.LocsBean> mCityList;
-    private CityAdapter mCityAdapter;
 
     @Bind(R.id.recyclerView)
     PullLoadMoreRecyclerView mRecyclerView;
@@ -87,6 +88,8 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
         mRecyclerView.setLinearLayout();
         mRecyclerView.setPushRefreshEnable(false);
         mRecyclerView.setOnPullLoadMoreListener(this);
+        RecyclerView rcv = mRecyclerView.getRecyclerView();
+        rcv.addItemDecoration(new DividerItemDecoration(activity,DividerItemDecoration.VERTICAL_LIST));
         return view;
     }
 

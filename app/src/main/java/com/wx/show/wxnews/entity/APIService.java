@@ -81,8 +81,21 @@ public interface APIService {
     @GET("event/list")
     Observable<Event> getEvent(@Query("loc") String loc,@Query("day_type") String day_type,@Query("type") String type);
 
-//    https://route.showapi.com/213-4?showapi_appid=17614&showapi_timestamp=20160408104259&topid=17&showapi_sign=b507e3daf46ef2289050ec57bb31662a
     @GET("213-4")
-    Observable<Music> getMusic(@Query("showapi_appid") String showapi_appid,@Query("showapi_timestamp") String showapi_timestamp,@Query("topid") String topic,@Query("showapi_sign") String showapi_sign);
+    Observable<Music> getMusic(@Query("music_appid") String music_appid,@Query("showapi_timestamp") String showapi_timestamp,@Query("topid") String topic,@Query("music_sign") String music_sign);
+
+    /**
+     * 花瓣福利
+     * @param num
+     * @param page
+     * @param beauty_appid
+     * @param showapi_timestamp
+     * @param type
+     * @param beauty_sign
+     * @return
+     */
+    // https://route.showapi.com/819-1?num=10&page=1&showapi_appid=17614&showapi_timestamp=20160415140024&type=38&showapi_sign=0453c8fc7f9c8c6fbb72da12349f591a
+    @GET("819-1")
+    Observable<Beauty> getBeauty(@Query("num") int num,@Query("page") int page,@Query("showapi_appid") String beauty_appid,@Query("showapi_timestamp") String showapi_timestamp,@Query("type") int type,@Query("showapi_sign") String beauty_sign);
 
 }

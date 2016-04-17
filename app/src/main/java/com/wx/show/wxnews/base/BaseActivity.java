@@ -28,9 +28,10 @@ public class BaseActivity extends AppCompatActivity {
     public String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
     public String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
 
-    public String musicUrl = "https://route.showapi.com/";
-    public String showapi_appid = "17630";
-    public String showapi_sign = "38cfa9dd7b5946daac678594ded87981";
+    public String showUrl = "https://route.showapi.com/";
+
+    public String music_appid = "17630";
+    public String music_sign = "38cfa9dd7b5946daac678594ded87981";
 
     private CatLoadingView loadingView;
 
@@ -63,11 +64,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        if(loadingView==null){
-            loadingView = new CatLoadingView();
-            loadingView.show(getSupportFragmentManager(), "");
-        }
-//        showLoading("请稍后");
+//        if(loadingView==null){
+//            loadingView = new CatLoadingView();
+//            loadingView.show(getSupportFragmentManager(), "");
+//        }
+        showLoading("请稍后");
     }
 
     public void showLoading(String content) {
@@ -87,13 +88,13 @@ public class BaseActivity extends AppCompatActivity {
      * 隐藏Dialog
      */
     public void disLoading() {
-        if (!isFinishing() && loadingView != null){
-            loadingView.dismiss();
-        }
-
-//        if (!isFinishing() && mLoadingDialog != null) {
-//            mLoadingDialog.hide();
+//        if (!isFinishing() && loadingView != null){
+//            loadingView.dismiss();
 //        }
+
+        if (!isFinishing() && mLoadingDialog != null) {
+            mLoadingDialog.hide();
+        }
     }
 
     @Override
@@ -121,4 +122,5 @@ public class BaseActivity extends AppCompatActivity {
         }
         overridePendingTransition(android.support.v7.appcompat.R.anim.abc_slide_in_bottom, android.support.v7.appcompat.R.anim.abc_slide_out_bottom);
     }
+
 }
