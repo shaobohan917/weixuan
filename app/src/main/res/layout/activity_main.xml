@@ -7,87 +7,101 @@
     android:orientation="vertical"
     tools:context="com.wx.show.wxnews.activity.HomeActivity">
 
-    <RelativeLayout
-        android:id="@+id/rl_city"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_city"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:gravity="center_vertical"
-            android:paddingLeft="6dp"
-            android:text="定位城市" />
+        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top" />
 
-        <TextView
-            android:id="@+id/tv_city_more"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:drawableRight="@drawable/icon_arrow"
-            android:gravity="center_vertical"
-            android:paddingRight="6dp"
-            android:text="更多城市" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_date"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:visibility="gone">
-
-
-        <TextView
-            android:id="@+id/tv_date_now"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:gravity="center_vertical"
-            android:paddingLeft="6dp"
-            android:text="定位城市" />
-
-        <TextView
-            android:id="@+id/tv_date_select"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:drawableRight="@drawable/icon_arrow"
-            android:gravity="center_vertical"
-            android:paddingRight="6dp"
-            android:text="指定日期" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/ll_catogory"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_category"
-            android:layout_width="wrap_content"
+        <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
+            android:id="@+id/header"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:gravity="center"
-            android:text="hehe"
-            android:textColor="@color/black" />
+            android:layout_gravity="center_horizontal|top">
 
-        <ImageView
-            android:id="@+id/iv_arrow_category"
-            android:paddingLeft="4dp"
-            android:src="@drawable/arrow_down"
-            android:layout_width="16dp"
-            android:layout_height="16dp" />
-    </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/rl_city"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="6dp"
+                    android:text="定位城市" />
+
+                <TextView
+                    android:id="@+id/tv_city_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:drawableRight="@drawable/icon_arrow"
+                    android:gravity="center_vertical"
+                    android:paddingRight="6dp"
+                    android:text="更多城市" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_date"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:visibility="gone">
 
 
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tv_date_now"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="6dp"
+                    android:text="定位城市" />
+
+                <TextView
+                    android:id="@+id/tv_date_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:drawableRight="@drawable/icon_arrow"
+                    android:gravity="center_vertical"
+                    android:paddingRight="6dp"
+                    android:text="指定日期" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_catogory"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:text="hehe"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/iv_arrow_category"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:paddingLeft="4dp"
+                    android:src="@drawable/arrow_down" />
+            </LinearLayout>
+        </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
+    </FrameLayout>
+
 
 </LinearLayout>

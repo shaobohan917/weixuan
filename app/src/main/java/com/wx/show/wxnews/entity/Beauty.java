@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Map;
+
 /**
  * Created by Luka on 2016/4/15.
  * 397308937@qq.com
@@ -59,12 +61,11 @@ public class Beauty {
 
     }
 
-    public String getJson(){
-        JSONObject object = new JSONObject(true);
-//        object.keySet();
-        String comment = object.getString("0");
-        ShowapiResBodyBean.PagebeanBean bean0 = JSON.parseObject(comment, ShowapiResBodyBean.PagebeanBean.class);
-
-        return bean0.title;
-    }
+//    public String getJson(Map content){
+//        JSONObject object = new JSONObject(content);
+//        String comment = object.getString("0");
+//        ShowapiResBodyBean.PagebeanBean bean0 = JSON.parseObject(comment, ShowapiResBodyBean.PagebeanBean.class);
+//
+//        return bean0.title;
+//    }
 }

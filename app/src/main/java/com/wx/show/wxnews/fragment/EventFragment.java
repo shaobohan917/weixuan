@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.activity.CityActivity;
@@ -71,6 +72,7 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
         View view = inflater.inflate(R.layout.activity_main, container,false);
         ButterKnife.bind(this,view);
 
+
         rlCity.setVisibility(View.VISIBLE);
         final String cityLoc = "当前定位城市:"+ locCity.substring(0,2);
         if(tvCity!=null){
@@ -86,6 +88,11 @@ public class EventFragment extends Fragment implements PullLoadMoreRecyclerView.
             }
         });
         mRecyclerView.setLinearLayout();
+
+
+        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
+        header.attachTo(mRecyclerView.getRecyclerView());
+
         mRecyclerView.setPushRefreshEnable(false);
         mRecyclerView.setOnPullLoadMoreListener(this);
         RecyclerView rcv = mRecyclerView.getRecyclerView();

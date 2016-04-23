@@ -34,16 +34,21 @@ import com.wx.show.wxnews.entity.Location;
 import com.wx.show.wxnews.entity.Movie;
 import com.wx.show.wxnews.entity.Music;
 import com.wx.show.wxnews.entity.ZhihuDaily;
+import com.wx.show.wxnews.fragment.BeautyEventFragment;
 import com.wx.show.wxnews.fragment.BeautyFragment;
 import com.wx.show.wxnews.fragment.EventFragment;
 import com.wx.show.wxnews.fragment.MovieFragment;
 import com.wx.show.wxnews.fragment.MusicFragment;
 import com.wx.show.wxnews.fragment.ZhihuDailyFragment;
 import com.wx.show.wxnews.util.DateUtil;
+import com.wx.show.wxnews.util.LogUtil;
 import com.wx.show.wxnews.util.ToastUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -74,7 +79,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     DrawerLayout mDrawerLayout;
 
 
-    private List<Fragment> mFragmentList = new ArrayList<>();//页卡视图集合
+    private ArrayList<Fragment> mFragmentList = new ArrayList<>();//页卡视图集合
 
     private ArrayList<Movie.SubjectsBean> mMvoieInTheaterData;
     private ArrayList<Movie.SubjectsBean> mMvoieCoomingSoonData;
@@ -95,6 +100,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ZhihuDailyFragment zhihuDailyFragment;
     private EventFragment eventFragment;
     private BeautyFragment beautyFragment;
+//    private BeautyEventFragment beautyEventFragment;
 
     private String tag = "HomeActivity";
     private ArrayList<Drawable> mIconList;
@@ -282,12 +288,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         movieFragment = new MovieFragment(this);
 //        zhihuDailyFragment = new ZhihuDailyFragment(this);
         beautyFragment = new BeautyFragment(this);
+//        beautyEventFragment = new BeautyEventFragment();
 
         mFragmentList.add(movieFragment);
 //        mFragmentList.add(musicFragment);
         mFragmentList.add(eventFragment);
 //        mFragmentList.add(zhihuDailyFragment);
         mFragmentList.add(beautyFragment);
+//        mFragmentList.add(beautyEventFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -558,7 +566,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         mBeautyData.add(beauty.showapi_res_body.a13);
                         mBeautyData.add(beauty.showapi_res_body.a14);
 
+//                        Map<String,Object> map = new HashMap<>();
+//                        map.put("showapi_res_body",beauty.showapi_res_body);
+//                        String text = beauty.getJson(map);
+//                        LogUtil.d("eee",text);
                     }
+
                 });
     }
 
