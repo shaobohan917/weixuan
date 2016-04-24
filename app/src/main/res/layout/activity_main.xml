@@ -100,6 +100,12 @@
                     android:paddingLeft="4dp"
                     android:src="@drawable/arrow_down" />
             </LinearLayout>
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/sv_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"></android.support.v7.widget.SearchView>
         </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
     </FrameLayout>
 

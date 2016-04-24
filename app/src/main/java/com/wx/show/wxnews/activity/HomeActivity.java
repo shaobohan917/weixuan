@@ -26,14 +26,17 @@ import com.baidu.mapapi.SDKInitializer;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.base.BaseActivity;
+import com.wx.show.wxnews.entity.Amber;
 import com.wx.show.wxnews.entity.Beauty;
 import com.wx.show.wxnews.entity.BookCatalog;
 import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
+import com.wx.show.wxnews.entity.ImageListDomain;
 import com.wx.show.wxnews.entity.Location;
 import com.wx.show.wxnews.entity.Movie;
 import com.wx.show.wxnews.entity.Music;
 import com.wx.show.wxnews.entity.ZhihuDaily;
+import com.wx.show.wxnews.fragment.AmberFragment;
 import com.wx.show.wxnews.fragment.BeautyEventFragment;
 import com.wx.show.wxnews.fragment.BeautyFragment;
 import com.wx.show.wxnews.fragment.EventFragment;
@@ -44,6 +47,12 @@ import com.wx.show.wxnews.util.DateUtil;
 import com.wx.show.wxnews.util.LogUtil;
 import com.wx.show.wxnews.util.ToastUtil;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +67,7 @@ import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 import rx.Observable;
+import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -91,6 +101,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicTaiwanData;
     private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicJapanData;
     private ArrayList<Beauty.ShowapiResBodyBean.PagebeanBean> mBeautyData;
+    private ArrayList<String> mAmberData;
 
 
     private int mNewsPage = 1;
@@ -100,6 +111,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ZhihuDailyFragment zhihuDailyFragment;
     private EventFragment eventFragment;
     private BeautyFragment beautyFragment;
+    private AmberFragment amberFragment;
 //    private BeautyEventFragment beautyEventFragment;
 
     private String tag = "HomeActivity";
@@ -281,6 +293,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mMusicTaiwanData = new ArrayList<>();
         mMusicJapanData = new ArrayList<>();
         mBeautyData = new ArrayList<>();
+        mAmberData = new ArrayList<>();
 
         //添加fragment
         eventFragment = new EventFragment(this, loc);
@@ -289,13 +302,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 //        zhihuDailyFragment = new ZhihuDailyFragment(this);
         beautyFragment = new BeautyFragment(this);
 //        beautyEventFragment = new BeautyEventFragment();
+        amberFragment = new AmberFragment(this);
 
         mFragmentList.add(movieFragment);
 //        mFragmentList.add(musicFragment);
         mFragmentList.add(eventFragment);
 //        mFragmentList.add(zhihuDailyFragment);
-        mFragmentList.add(beautyFragment);
+//        mFragmentList.add(beautyFragment);
 //        mFragmentList.add(beautyEventFragment);
+        mFragmentList.add(amberFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -531,6 +546,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void getBeauty(int page, int type) {
         getBeauty(page, type, false);
     }
+
     public void getBeauty(int page, int type, boolean showLoading) {
         Observable<Beauty> observable = getUrlService(showUrl, showLoading).getBeauty(15, page, music_appid, DateUtil.getCurrentDate("time"), type, music_sign);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -565,11 +581,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         mBeautyData.add(beauty.showapi_res_body.a12);
                         mBeautyData.add(beauty.showapi_res_body.a13);
                         mBeautyData.add(beauty.showapi_res_body.a14);
-
-//                        Map<String,Object> map = new HashMap<>();
-//                        map.put("showapi_res_body",beauty.showapi_res_body);
-//                        String text = beauty.getJson(map);
-//                        LogUtil.d("eee",text);
                     }
 
                 });
@@ -677,5 +688,114 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    /**
+     * jsoup
+     */
+    public void getImage() {
+        Observable<List<ImageListDomain>> observable = Observable.create(new Observable.OnSubscribe<List<ImageListDomain>>() {
+            @Override
+            public void call(Subscriber<? super List<ImageListDomain>> subscriber) {
+                List<ImageListDomain> imageListDomainList = new ArrayList();
+                try {
+                    Document document = Jsoup.connect("http://m.xxxiao.com/cat/MRXT").get();
+                    Element imageListelement = document.getElementById("blog-grid");
+                    Elements imageListElements = imageListelement.getElementsByAttributeValueContaining("class", "col-lg-4 col-md-4 three-columns post-box");
+
+                    for (Element imageListElement : imageListElements) {
+                        Element link = imageListelement.select("a[href]").first();
+                        Element image = imageListElement.select("img").first();
+                        String linkUrl = link.attr("abs:href");
+                        String imageUrl = image.attr("abs:src");
+                        String imageTitle = image.attr("alt").trim();
+                        imageListDomainList.add(new ImageListDomain(linkUrl, imageUrl, imageTitle));
+
+                    }
+                    subscriber.onNext(imageListDomainList);
+                } catch (IOException e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+        Subscriber<List<ImageListDomain>> subscriber = new Subscriber<List<ImageListDomain>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtil.d("haha", e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<ImageListDomain> imageListDomains) {
+                String url = imageListDomains.get(0).getImageUrl();
+                LogUtil.d("haha", url);
+            }
+        };
+
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 郭采洁
+     */
+    public void getAmber(final String query, final int page) {
+        Observable<List<ImageListDomain>> observable = Observable.create(new Observable.OnSubscribe<List<ImageListDomain>>() {
+            @Override
+            public void call(Subscriber<? super List<ImageListDomain>> subscriber) {
+                List<ImageListDomain> imageListDomainList = new ArrayList();
+                try {
+                    Document document = Jsoup.connect("http://www.n63.com/photodir/?album=/china/" + query + "&page=" + page + "&").get();
+                    Element imageListelement = document.getElementById("container");        //container
+                    Elements imageListElements = imageListelement.getElementsByAttributeValueContaining("class", "grid");
+
+                    LogUtil.d("haha", "imageListElements.size():" + imageListElements.size());
+                    for (Element imageListElement : imageListElements) {
+                        Element image = imageListElement.select("img").first();
+                        String imageUrl = image.attr("abs:src");
+                        String imageTitle = image.attr("src");
+                        imageListDomainList.add(new ImageListDomain(imageUrl, imageTitle));
+                    }
+                    subscriber.onNext(imageListDomainList);
+                } catch (IOException e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+        Subscriber<List<ImageListDomain>> subscriber = new Subscriber<List<ImageListDomain>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtil.d("haha", "onError:" + e.getMessage());
+                ToastUtil.showToast(HomeActivity.this,e.getMessage());
+            }
+
+            @Override
+            public void onNext(List<ImageListDomain> imageListDomains) {
+                if (page == 1) {
+                    mAmberData.clear();
+                }
+                for (int i = 0; i < imageListDomains.size(); i++) {
+                    mAmberData.add(imageListDomains.get(i).getImageUrl());
+                    LogUtil.d("haha", imageListDomains.get(i).getImageUrl());
+                }
+                amberFragment.setData(mAmberData);
+            }
+        };
+
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 }
