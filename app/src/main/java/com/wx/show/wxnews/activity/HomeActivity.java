@@ -3,6 +3,7 @@ package com.wx.show.wxnews.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,6 @@ import com.wx.show.wxnews.entity.Movie;
 import com.wx.show.wxnews.entity.Music;
 import com.wx.show.wxnews.entity.ZhihuDaily;
 import com.wx.show.wxnews.fragment.AmberFragment;
-import com.wx.show.wxnews.fragment.BeautyEventFragment;
 import com.wx.show.wxnews.fragment.BeautyFragment;
 import com.wx.show.wxnews.fragment.EventFragment;
 import com.wx.show.wxnews.fragment.MovieFragment;
@@ -103,24 +104,22 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<Beauty.ShowapiResBodyBean.PagebeanBean> mBeautyData;
     private ArrayList<String> mAmberData;
 
-
+    private String tag = "HomeActivity";
     private int mNewsPage = 1;
-    //    private BookFragment bookFragment;
     private MusicFragment musicFragment;
     private MovieFragment movieFragment;
     private ZhihuDailyFragment zhihuDailyFragment;
     private EventFragment eventFragment;
     private BeautyFragment beautyFragment;
-    private AmberFragment amberFragment;
-//    private BeautyEventFragment beautyEventFragment;
+//    private AmberFragment amberFragment;
 
-    private String tag = "HomeActivity";
     private ArrayList<Drawable> mIconList;
     private ActionBarDrawerToggle mDrawerToggle;
     private int mCurrent;
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
+    private long mExitTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,7 +146,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mIconList.add(getResources().getDrawable(R.mipmap.ic_videocam_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_volume_up_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
-//        mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
+        mIconList.add(getResources().getDrawable(R.mipmap.ic_library_music_black_48dp));
         for (int i = 0; i < mIconList.size(); i++) {
             tabHost.addTab(
                     tabHost.newTab()
@@ -297,20 +296,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         //添加fragment
         eventFragment = new EventFragment(this, loc);
-//        musicFragment = new MusicFragment(this);
+        musicFragment = new MusicFragment(this);
         movieFragment = new MovieFragment(this);
 //        zhihuDailyFragment = new ZhihuDailyFragment(this);
         beautyFragment = new BeautyFragment(this);
-//        beautyEventFragment = new BeautyEventFragment();
-        amberFragment = new AmberFragment(this);
+//        amberFragment = new AmberFragment(this);
 
         mFragmentList.add(movieFragment);
-//        mFragmentList.add(musicFragment);
+        mFragmentList.add(musicFragment);
         mFragmentList.add(eventFragment);
 //        mFragmentList.add(zhihuDailyFragment);
-//        mFragmentList.add(beautyFragment);
-//        mFragmentList.add(beautyEventFragment);
-        mFragmentList.add(amberFragment);
+        mFragmentList.add(beautyFragment);
+//        mFragmentList.add(amberFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -349,34 +346,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     /**
      * 获取数据
      */
-
-//    public void getBookCatalogByRxJava() {
-//        Observable<BookCatalog> observable = getUrlService(bookUrl,false).getBookCatalogData(bookKey);
-//        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<BookCatalog>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        bookFragment.setData(mBookData);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onNext(BookCatalog bookCatalog) {
-//                        if (bookCatalog.error_code == 0 && bookCatalog.result != null) {
-//                            if (mNewsPage == 1) {
-//                                mBookData.clear();
-//                            }
-//                            mBookData.addAll(bookCatalog.result);
-//                        } else {
-//                            ToastUtil.showToast(HomeActivity.this, bookCatalog.error_code + ":" + bookCatalog.reason);
-//                        }
-//                    }
-//                });
-//    }
     public void getMovieInTheater() {
         Observable<Movie> observable = getUrlService(doubanBaseUrl, true).getMovieInTheater();
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -789,7 +758,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     mAmberData.add(imageListDomains.get(i).getImageUrl());
                     LogUtil.d("haha", imageListDomains.get(i).getImageUrl());
                 }
-                amberFragment.setData(mAmberData);
+//                amberFragment.setData(mAmberData);
             }
         };
 
@@ -797,5 +766,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    //两次返回键退出
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - mExitTime > 2000) {
+                showToast("再按一次退出");
+                mExitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

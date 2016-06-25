@@ -49,7 +49,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.wx.show.wxnews.activity.SplashActivity"
+            android:name="com.wx.show.wxnews.activity.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleFullscreen" >
             <intent-filter>
@@ -57,9 +57,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.wx.show.wxnews.activity.HomeActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <!--<activity-->
+            <!--android:name="com.wx.show.wxnews.activity.HomeActivity"-->
+            <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>-->
         <activity android:name=".activity.NewsActivity"></activity>
         <activity
             android:name=".activity.ViewerActivity"

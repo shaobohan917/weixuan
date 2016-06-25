@@ -11,6 +11,7 @@ import com.roger.catloadinglibrary.CatLoadingView;
 import com.umeng.analytics.MobclickAgent;
 import com.wx.show.wxnews.entity.APIService;
 import com.wx.show.wxnews.util.LogUtil;
+import com.wx.show.wxnews.util.ToastUtil;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -121,6 +122,10 @@ public class BaseActivity extends AppCompatActivity {
             finish();
         }
         overridePendingTransition(android.support.v7.appcompat.R.anim.abc_slide_in_bottom, android.support.v7.appcompat.R.anim.abc_slide_out_bottom);
+    }
+
+    public void showToast(String str){
+        ToastUtil.showToast(this,str);
     }
 
 }
