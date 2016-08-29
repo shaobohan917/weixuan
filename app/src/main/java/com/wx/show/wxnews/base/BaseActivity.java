@@ -24,10 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class BaseActivity extends AppCompatActivity {
     public String doubanBaseUrl = "https://api.douban.com/v2/";
-    public String bookUrl = "http://apis.juhe.cn/";
-
     public String zhihuDailyUrl = "http://news.at.zhihu.com/api/4/";
-    public String bookKey = "91b9052ac36278374cfaf1b1fcf05b5a";
 
     public String showUrl = "https://route.showapi.com/";
 
@@ -38,11 +35,14 @@ public class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog mLoadingDialog;
 
+    public BaseActivity mContext;   //子类只需用此成员变量
+
     private String tag = "BaseActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         LogUtil.d(tag, "onCreate=" + this.getClass().getName());
     }
 
@@ -65,10 +65,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-//        if(loadingView==null){
-//            loadingView = new CatLoadingView();
-//            loadingView.show(getSupportFragmentManager(), "");
-//        }
         showLoading("请稍后");
     }
 
@@ -89,10 +85,6 @@ public class BaseActivity extends AppCompatActivity {
      * 隐藏Dialog
      */
     public void disLoading() {
-//        if (!isFinishing() && loadingView != null){
-//            loadingView.dismiss();
-//        }
-
         if (!isFinishing() && mLoadingDialog != null) {
             mLoadingDialog.hide();
         }

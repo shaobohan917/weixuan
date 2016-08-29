@@ -73,6 +73,8 @@ dependencies {
     //汉字转拼音
     compile 'com.github.promeg:tinypinyin:1.0.0'
     compile files('libs/jpush-android-2.1.6.jar')
+
+    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
 }
 
 

@@ -3,7 +3,6 @@ package com.wx.show.wxnews.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,21 +27,16 @@ import com.baidu.mapapi.SDKInitializer;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.wx.show.wxnews.R;
 import com.wx.show.wxnews.base.BaseActivity;
-import com.wx.show.wxnews.entity.Amber;
 import com.wx.show.wxnews.entity.Beauty;
-import com.wx.show.wxnews.entity.BookCatalog;
 import com.wx.show.wxnews.entity.City;
 import com.wx.show.wxnews.entity.Event;
 import com.wx.show.wxnews.entity.ImageListDomain;
 import com.wx.show.wxnews.entity.Location;
 import com.wx.show.wxnews.entity.Movie;
-import com.wx.show.wxnews.entity.Music;
 import com.wx.show.wxnews.entity.ZhihuDaily;
-import com.wx.show.wxnews.fragment.AmberFragment;
 import com.wx.show.wxnews.fragment.BeautyFragment;
 import com.wx.show.wxnews.fragment.EventFragment;
 import com.wx.show.wxnews.fragment.MovieFragment;
-import com.wx.show.wxnews.fragment.MusicFragment;
 import com.wx.show.wxnews.fragment.ZhihuDailyFragment;
 import com.wx.show.wxnews.util.DateUtil;
 import com.wx.show.wxnews.util.LogUtil;
@@ -55,10 +49,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,7 +60,6 @@ import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -96,18 +86,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<Movie.SubjectsBean> mMvoieInTheaterData;
     private ArrayList<Movie.SubjectsBean> mMvoieCoomingSoonData;
     private ArrayList<Movie.SubjectsBean> mMovieSearchData;
-    private ArrayList<BookCatalog.ResultBean> mBookData;
     private ArrayList<Event.EventsBean> mEventData;
     private ArrayList<ZhihuDaily.StoriesBean> mZhihuData;
     private ArrayList<City.LocsBean> mCityData;
-    private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicTaiwanData;
-    private ArrayList<Music.ShowapiResBodyBean.PagebeanBean.SonglistBean> mMusicJapanData;
     private ArrayList<Beauty.ShowapiResBodyBean.PagebeanBean> mBeautyData;
     private ArrayList<String> mAmberData;
 
-    private String tag = "HomeActivity";
     private int mNewsPage = 1;
-    private MusicFragment musicFragment;
     private MovieFragment movieFragment;
     private ZhihuDailyFragment zhihuDailyFragment;
     private EventFragment eventFragment;
@@ -134,10 +119,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         initLocation();
         mLocationClient.start();
 
-
         initView();
         initTab();
-//        initData();
+//        initData(loc);
         initListener();
     }
 
@@ -145,7 +129,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         //添加标题
         mIconList = new ArrayList();
         mIconList.add(getResources().getDrawable(R.mipmap.ic_videocam_black_48dp));
-        mIconList.add(getResources().getDrawable(R.mipmap.ic_volume_up_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_fiber_new_black_48dp));
         mIconList.add(getResources().getDrawable(R.mipmap.ic_library_music_black_48dp));
         for (int i = 0; i < mIconList.size(); i++) {
@@ -285,30 +268,23 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private void initData(Location loc) {
         mEventData = new ArrayList<>();
         mZhihuData = new ArrayList<>();
-        mBookData = new ArrayList<>();
         mMvoieInTheaterData = new ArrayList<>();
         mMvoieCoomingSoonData = new ArrayList<>();
         mMovieSearchData = new ArrayList();
         mCityData = new ArrayList<>();
-        mMusicTaiwanData = new ArrayList<>();
-        mMusicJapanData = new ArrayList<>();
         mBeautyData = new ArrayList<>();
         mAmberData = new ArrayList<>();
 
         //添加fragment
         eventFragment = new EventFragment(this, loc);
-        musicFragment = new MusicFragment(this);
         movieFragment = new MovieFragment(this);
-//        zhihuDailyFragment = new ZhihuDailyFragment(this);
-        beautyFragment = new BeautyFragment(this);
-//        amberFragment = new AmberFragment(this);
+        zhihuDailyFragment = new ZhihuDailyFragment(this);
+//        beautyFragment = new BeautyFragment(this);
 
         mFragmentList.add(movieFragment);
-        mFragmentList.add(musicFragment);
         mFragmentList.add(eventFragment);
-//        mFragmentList.add(zhihuDailyFragment);
-        mFragmentList.add(beautyFragment);
-//        mFragmentList.add(amberFragment);
+        mFragmentList.add(zhihuDailyFragment);
+//        mFragmentList.add(beautyFragment);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
@@ -479,39 +455,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 });
     }
-
-    public void getMusic(final String topic) {
-        Observable<Music> observable = getUrlService(showUrl, true).getMusic(music_appid, DateUtil.getCurrentDate("time"), topic, music_sign);
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Music>() {
-                    @Override
-                    public void onCompleted() {
-                        if (topic.equals("5")) {
-                            musicFragment.setMusicTaiwanData(mMusicTaiwanData);
-                        } else if (topic.equals("17")) {
-                            musicFragment.setMusicJapanData(mMusicJapanData);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        ToastUtil.showToast(HomeActivity.this, "Error:" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Music music) {
-                        if (topic.equals("5")) {
-                            mMusicTaiwanData.clear();
-                            mMusicTaiwanData.addAll(music.showapi_res_body.pagebean.songlist);
-                        } else if (topic.equals("17")) {
-                            mMusicJapanData.clear();
-                            mMusicJapanData.addAll(music.showapi_res_body.pagebean.songlist);
-                        }
-
-                    }
-                });
-    }
-
 
     public void getBeauty(int page, int type) {
         getBeauty(page, type, false);

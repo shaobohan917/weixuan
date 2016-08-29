@@ -33,14 +33,6 @@ public interface APIService {
 
     /**
      *
-     * @param key
-     * @return
-     */
-    @GET("goodbook/catalog")
-    Observable<BookCatalog> getBookCatalogData(@Query("key") String key);
-
-    /**
-     *
      * @param catalog_id    目录编号
      * @param pn            数据返回起始
      * @param rn            数据返回条数，最大30
@@ -80,9 +72,6 @@ public interface APIService {
      */
     @GET("event/list")
     Observable<Event> getEvent(@Query("loc") String loc,@Query("day_type") String day_type,@Query("type") String type);
-
-    @GET("213-4")
-    Observable<Music> getMusic(@Query("music_appid") String music_appid,@Query("showapi_timestamp") String showapi_timestamp,@Query("topid") String topic,@Query("music_sign") String music_sign);
 
     /**
      * 花瓣福利
